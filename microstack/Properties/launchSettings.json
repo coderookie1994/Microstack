@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "microstack": {
+      "commandName": "Executable",
+      "executablePath": "C:\\github.com\\mstack\\microstack\\bin\\Debug\\netcoreapp3.1\\microstack.exe",
+      //"commandLineArgs": "config --name confy"
+      "commandLineArgs": "run"
+    }
+  }
+}
