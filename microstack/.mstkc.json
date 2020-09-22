@@ -1,0 +1,9 @@
+[
+    {
+        "startupProjectPath": "C:\\github.com\\testapp",
+        "projectName": "TestApp",
+        "ConfigOverrides": {
+            "Test": "FromConfig"
+        }
+    }
+]

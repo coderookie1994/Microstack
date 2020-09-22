@@ -7,7 +7,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using McMaster.Extensions.CommandLineUtils;
-using microstack.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using microstack.Commands;
+using microstack.Commands.SubCommands;
+using microstack.Processor;
 using Newtonsoft.Json;
 
 namespace microstack
@@ -16,76 +20,84 @@ namespace microstack
     {
         static void Main(string[] args)
         {
-            var app = new CommandLineApplication()
-            {
-                Description = "Run your applications without using Visual Studio or manually running dotnet run",
-                Name = "microstack"
-            };
+        //     var app = new CommandLineApplication()
+        //     {
+        //         Description = "Run your applications without using Visual Studio or manually running dotnet run",
+        //         Name = "microstack"
+        //     };
 
-            app.HelpOption(true);
-            app.Command("config", cmd =>
-            {
-                cmd.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect;
+        //     app.HelpOption(true);
+        //     app.Command("config", cmd =>
+        //     {
+        //         cmd.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect;
 
-                var configNameArg = cmd.Option("-n|--name <NAME>", "Configuration name for set of apps, name as .ms_<NAME>.json", CommandOptionType.SingleValue).IsRequired();
+        //         var configNameArg = cmd.Option("-n|--name <NAME>", "Configuration name for set of apps, name as .ms_<NAME>.json", CommandOptionType.SingleValue).IsRequired();
 
-                cmd.OnExecute(() =>
-                {
-                    var configName = configNameArg.Value();
+        //         cmd.OnExecute(() =>
+        //         {
+        //             var configName = configNameArg.Value();
 
-                    if (string.IsNullOrEmpty(configName))
-                        cmd.ShowHelp();
+        //             if (string.IsNullOrEmpty(configName))
+        //                 cmd.ShowHelp();
 
-                    var directory = Directory.GetCurrentDirectory();
+        //             var directory = Directory.GetCurrentDirectory();
 
-                    var filePath = Path.Combine(directory, $".ms_{configName}.json");
-                    if (!File.Exists(filePath))
-                    {
-                        using var sw = File.AppendText($".ms_{configName}.json");
-                        sw.WriteLine(ConfigurationTemplate.Template);
-                    }
+        //             var filePath = Path.Combine(directory, $".ms_{configName}.json");
+        //             if (!File.Exists(filePath))
+        //             {
+        //                 using var sw = File.AppendText($".ms_{configName}.json");
+        //                 sw.WriteLine(ConfigurationTemplate.Template);
+        //             }
 
-                    var processStartArgs = new ProcessStartInfo("notepad");
-                    processStartArgs.Arguments = $"/A \"{filePath}\"";
-                    using (var notepadProcess = Process.Start(processStartArgs))
-                    {
-                        notepadProcess.WaitForExit();
-                    }
+        //             var processStartArgs = new ProcessStartInfo("notepad");
+        //             processStartArgs.Arguments = $"/A \"{filePath}\"";
+        //             using (var notepadProcess = Process.Start(processStartArgs))
+        //             {
+        //                 notepadProcess.WaitForExit();
+        //             }
 
-                    return 1;
-                });
-            });
+        //             return 1;
+        //         });
+        //     });
 
-            app.Command("run", (cmd) =>
-            {
-                cmd.OnExecute(() =>
-                {
-                    var filename = Directory.GetFiles(Directory.GetCurrentDirectory()).FirstOrDefault(f => f.Contains(".ms_"));
-                    if (string.IsNullOrEmpty(filename))
-                    {
-                        using var sw = new StringWriter();
-                        sw.WriteLine("No config file found, run \"microstack config\" to setup initial configuration");
+        //     app.Command("run", (cmd) =>
+        //     {
+        //         cmd.OnExecute(() =>
+        //         {
+        //             var filename = Directory.GetFiles(Directory.GetCurrentDirectory()).FirstOrDefault(f => f.Contains(".ms_"));
+        //             if (string.IsNullOrEmpty(filename))
+        //             {
+        //                 using var sw = new StringWriter();
+        //                 sw.WriteLine("No config file found, run \"microstack config\" to setup initial configuration");
 
-                        cmd.Out = sw;
-                        return;
-                    }
+        //                 cmd.Out = sw;
+        //                 return;
+        //             }
 
-                    var appStack = JsonConvert.DeserializeObject<MicroStack>(File.ReadAllText(filename));
-                });
-            });
+        //             var appStack = JsonConvert.DeserializeObject<MicroStack>(File.ReadAllText(filename));
+        //         });
+        //     });
 
-            app.OnExecute(() =>
-            {
-                if(args.Length <= 0)
-                    app.ShowHelp();
+        //     app.OnExecute(() =>
+        //     {
+        //         if(args.Length <= 0)
+        //             app.ShowHelp();
 
-                return 0;
-            });
+        //         return 0;
+        //     });
 
-            app.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.CollectAndContinue;
+        //     app.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.CollectAndContinue;
 
 
-            app.Execute(args);
+        //     app.Execute(args);
+            CreateHostBuilder(args).RunCommandLineApplicationAsync<Run>(args).GetAwaiter().GetResult();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) => {
+                    services.AddLogging();
+                    services.AddSingleton<StackProcessor>();
+                });
     }
 }

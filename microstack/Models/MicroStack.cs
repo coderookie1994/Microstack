@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace microstack
+namespace microstack.Models
 {
     public class MicroStack
     {
