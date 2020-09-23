@@ -34,6 +34,7 @@ namespace microstack.Processor
                 .Select(pInfo => 
                 {
                     var process = Process.Start(pInfo);
+                    process.WaitForExit();
                     // _logger.LogInformation($"{pInfo.}")
                     return process;
                 })
@@ -54,7 +55,8 @@ namespace microstack.Processor
                 processStartInfo.FileName = DotNetExe.FullPathOrDefault();
                 processStartInfo.Arguments = "run";
                 processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
-                
+                processStartInfo.RedirectStandardOutput = true;
+
                 return processStartInfo;
             }).ToList();
         }

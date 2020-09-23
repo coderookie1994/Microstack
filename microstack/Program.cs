@@ -90,14 +90,15 @@ namespace microstack
 
 
         //     app.Execute(args);
-            CreateHostBuilder(args).RunCommandLineApplicationAsync<Run>(args).GetAwaiter().GetResult();
+        var cts = new CancellationTokenSource();
+        Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) => {
+                services.AddLogging();
+                services.AddSingleton<StackProcessor>();
+            })
+            .RunCommandLineApplicationAsync<Run>(args, cts.Token)
+            .GetAwaiter()
+            .GetResult();
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureServices((context, services) => {
-                    services.AddLogging();
-                    services.AddSingleton<StackProcessor>();
-                });
     }
 }

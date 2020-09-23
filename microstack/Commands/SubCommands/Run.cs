@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Hosting;
 using microstack.Models;
 using microstack.Processor;
 using Newtonsoft.Json;
@@ -12,6 +13,8 @@ namespace microstack.Commands.SubCommands
     public class Run : BaseCommand
     {
         private StackProcessor _spc;
+        private IHostEnvironment _env;
+        private IHostApplicationLifetime _lifetime;
 
         // [Option(CommandOptionType.SingleValue, 
         //     ShortName = "c", 
@@ -22,13 +25,16 @@ namespace microstack.Commands.SubCommands
         [FileExists]
         public string ConfigFile { get; set; }
 
-        public Run(StackProcessor spc)
+        public Run(StackProcessor spc, IHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             _spc = spc;
+            _env = env;
+            _lifetime = lifetime;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
         {
+            var ct = _lifetime.ApplicationStopping;
             // ConfigFile = app.
             if (ConfigFile is null)
             {
@@ -41,6 +47,9 @@ namespace microstack.Commands.SubCommands
             var configurations = JsonConvert.DeserializeObject<List<Configuration>>(File.ReadAllText(Path.Combine(ConfigFile)));
 
             _spc.InitStack(configurations);
+
+            while(!ct.IsCancellationRequested) { }
+            
             return 0;
         }
     }
