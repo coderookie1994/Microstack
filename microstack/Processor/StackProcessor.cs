@@ -61,7 +61,7 @@ namespace microstack.Processor
                     processStartInfo.Environment.Add(confOverride);
                 }
                 processStartInfo.FileName = DotNetExe.FullPathOrDefault();
-                processStartInfo.Arguments = $"run --urls \"https://localhost:{p.Port}\"";
+                processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://localhost:{p.Port}\"";
                 processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
                 processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
