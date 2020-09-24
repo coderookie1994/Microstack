@@ -14,16 +14,21 @@ namespace microstack.Processor
         private IList<Configuration> _configurations;
         private IList<ProcessStartInfo> _processInfoObjects;
         private IList<Process> _processes;
+        private Dictionary<string, string> _processNames;
         private ILogger<StackProcessor> _logger;
 
         public bool IsInitialized { get; private set; }
 
-        public StackProcessor()
+        private bool _isVerbose { get; set; }
+        public StackProcessor(ILogger<StackProcessor> logger)
         {
-            // _logger = logger;
+            _logger = logger;
         }
+
+        public void SetVerbosity(bool isVerbose) => _isVerbose = isVerbose;
         public void InitStack(IList<Configuration> configurations)
         {
+            _processNames = new Dictionary<string, string>();
             _configurations = configurations;
             if (IsInitialized)
                 return;
@@ -34,12 +39,15 @@ namespace microstack.Processor
                 .Select(pInfo => 
                 {
                     var process = Process.Start(pInfo);
-                    process.WaitForExit();
-                    // _logger.LogInformation($"{pInfo.}")
+                    // _processNames.Add(pInfo.)
+                    process.ErrorDataReceived += new DataReceivedEventHandler(HandleError);
+                    // process.WaitForExit();
+                    // process.BeginErrorReadLine();
                     return process;
                 })
                 .ToList();
             IsInitialized = true;
+            _logger.LogInformation("Apps initialized, Press CTRL+C to exit...");
         }
 
         private void BuildProcessObjects()
@@ -53,12 +61,26 @@ namespace microstack.Processor
                     processStartInfo.Environment.Add(confOverride);
                 }
                 processStartInfo.FileName = DotNetExe.FullPathOrDefault();
-                processStartInfo.Arguments = "run";
+                processStartInfo.Arguments = $"run --urls \"https://localhost:{p.Port}\"";
                 processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
-                processStartInfo.RedirectStandardOutput = true;
+                processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
                 return processStartInfo;
             }).ToList();
+        }
+
+        private void HandleError(object sendingProcess, DataReceivedEventArgs args)
+        {
+
+        }
+
+        private bool SetVerbosity(bool verboseConsole, bool verboseProcess)
+        {
+            if (verboseConsole)
+                return false;
+            if (verboseProcess)
+                return false;
+            return true;
         }
     }
 }

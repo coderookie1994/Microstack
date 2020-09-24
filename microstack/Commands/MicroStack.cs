@@ -10,7 +10,7 @@ namespace microstack.Commands
     {
         protected async override Task<int> OnExecute(CommandLineApplication app)
         {
-            // app.Execute();
+            app.ShowHelp();
             return 0;
         }
     }

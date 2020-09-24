@@ -2,6 +2,8 @@
     {
         "startupProjectPath": "C:\\github.com\\testapp",
         "projectName": "TestApp",
+        "port": "5001",
+        "verbose": false,
         "ConfigOverrides": {
             "Test": "FromConfig"
         }

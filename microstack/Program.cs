@@ -96,7 +96,7 @@ namespace microstack
                 services.AddLogging();
                 services.AddSingleton<StackProcessor>();
             })
-            .RunCommandLineApplicationAsync<Run>(args, cts.Token)
+            .RunCommandLineApplicationAsync<MicroStack>(args, cts.Token)
             .GetAwaiter()
             .GetResult();
         }

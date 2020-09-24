@@ -6,9 +6,11 @@ namespace microstack.Models
     {
         public string StartupProjectPath { get; set; }
         public string ProjectName { get; set; }
+        public string NextProjectName { get; set; }
         public string GitProjectRootPath { get; set; }
         public bool PullLatest { get; set; }
         public int Port { get; set; }
+        public bool Verbose { get; set; }
         public Dictionary<string, string> ConfigOverrides { get; set; }
     }
 }
