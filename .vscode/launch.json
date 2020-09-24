@@ -11,8 +11,8 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/microstack/bin/Debug/netcoreapp3.1/microstack.dll",
-            "args": ["run", "-v", "-c", ".mstkc.json"],
-            // "args": ["run"],
+            // "args": ["run", "-v", "-c", ".mstkc.json"],
+            "args": ["new", "-c"],
             "cwd": "${workspaceFolder}/microstack",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",

@@ -13,7 +13,8 @@ namespace microstack.Commands.SubCommands
     [Command(Name = "run",
         Description="Run the stack of apps specified in .mstkc.json",
         ShowInHelpText = true,
-        ExtendedHelpText = "Provide path to .mstkc.json using [options] or set MSTKC_JSON environment variable")]
+        ExtendedHelpText = "Provide path to .mstkc.json using [options] or set MSTKC_JSON environment variable",
+        UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect)]
     public class Run : BaseCommand
     {
         private StackProcessor _spc;
@@ -29,7 +30,7 @@ namespace microstack.Commands.SubCommands
             CommandOptionType.SingleValue,
             ValueName = "path",
             Description = "Path to .mstkc.json",
-            LongName = "configfile",
+            LongName = "config-file",
             ShortName = "c",
             ShowInHelpText = true
         )]
@@ -44,7 +45,9 @@ namespace microstack.Commands.SubCommands
             Description = "Log output from processes",
             ShowInHelpText=true)]
         public bool Verbose { get; set; }
-        public Run(StackProcessor spc, IHostEnvironment env, IHostApplicationLifetime lifetime)
+        public Run(StackProcessor spc, 
+            IHostEnvironment env, 
+            IHostApplicationLifetime lifetime)
         {
             _spc = spc;
             _env = env;
