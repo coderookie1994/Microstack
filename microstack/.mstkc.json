@@ -1,14 +1,31 @@
-[
-  {
-    "StartupProjectPath": "<<PATH TO STARTUP PROJECT>>",
-    "ProjectName": "<<PROJECT NAME>>",
-    "NextProjectName": "<<PROJECT NAME OF THE DEPENDENT PROJECT>>",
-    "GitProjectRootPath": "<<PATH TO GIT ROOT>>",
-    "PullLatest": false,
-    "Port": 0,
-    "Verbose": false,
-    "ConfigOverrides": {
-      "KEY_TO_OVERRIDE": "VALUE_OF_OVERRIDDEN_KEY"
+{
+  "defaultProfile": [
+    {
+      "StartupProjectPath": "C:\\github.com\\testapp",
+      "ProjectName": "testapp",
+      "NextProjectName": "",
+      "GitProjectRootPath": "C:\\github.com\\testapp",
+      "PullLatest": false,
+      "Port": 5001,
+      "Verbose": false,
+      "ConfigOverrides": {
+        "Test": "FromOverridenKey"
+      }
     }
-  }
-]
+  ],
+  "profile2": [
+    {
+      "StartupProjectPath": "C:\\github.com\\testapp",
+      "ProjectName": "testapp",
+      "NextProjectName": "",
+      "GitProjectRootPath": "C:\\github.com\\testapp",
+      "PullLatest": false,
+      "Port": 5001,
+      "Verbose": false,
+      "ConfigOverrides": {
+        "Test": "FromOverridenKey",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}

@@ -47,7 +47,6 @@ namespace microstack.Processor
                 })
                 .ToList();
             IsInitialized = true;
-            _logger.LogInformation("Apps initialized, Press CTRL+C to exit...");
         }
 
         private void BuildProcessObjects()
