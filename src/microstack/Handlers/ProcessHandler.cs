@@ -46,8 +46,6 @@ namespace microstack.Handlers
                 _console.ResetColor();
             }
 
-
-            _console.Out.WriteLine("Press CTRL+C to exit... \r\n");
             return Task.CompletedTask;
         }
 

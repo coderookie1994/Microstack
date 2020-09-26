@@ -103,6 +103,9 @@ namespace microstack.Commands.SubCommands
             
             while(!ct.IsCancellationRequested) { }
 
+            _console.ResetColor();
+            _console.ForegroundColor = ConsoleColor.DarkMagenta;
+            _console.Out.WriteLine("\r\nMicrostack stopping...\r\n");
             return 0;
         }
 
