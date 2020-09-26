@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using microstack.configuration.Models;
 using microstack.Models;
 
 namespace microstack.Builders

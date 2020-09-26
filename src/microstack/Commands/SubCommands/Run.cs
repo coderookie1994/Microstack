@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
-using microstack.Models;
+using microstack.configuration.Models;
 using microstack.Processor;
 using Newtonsoft.Json;
 
@@ -71,42 +71,29 @@ namespace microstack.Commands.SubCommands
             
             try {
                 DetermineEnvironmentPath();
+                if (ConfigFile is null || !ConfigFile.EndsWith(".mstkc.json"))
+                {
+                    app.ShowHelp();
+                    return 1;
+                }
+                configurations = ExtractConfigFromPath(ConfigFile);
             } catch (Exception ex)
             {
                 OnException(ex);
                 return 1;
             }
-
-            if (ConfigFile is null)
-            {
-                app.ShowHelp();
-                return 1;
-            }
-
-            if (!ConfigFile.EndsWith(".mstkc.json"))
-            {
-                app.ShowHelp();
-                return 1;
-            }
-            
-            try {
-                configurations = ExtractConfigFromPath(ConfigFile);
-            } catch(Exception ex)
-            {
-                OnException(ex);
-                return 1;
-            }
+           
             if (configurations.Count > 1 && string.IsNullOrWhiteSpace(Profile))
             {
                 OutputError("Multiple profiles found use -p to specify profile to use");
                 return 1;
             }
             if (configurations.Count == 1)
-                _spc.InitStack(configurations.First().Value);
+                await _spc.InitStack(configurations.First().Value);
             if (configurations.ContainsKey(Profile))
             {
                 OuputToConsole($"Selected {Profile} \r\n");
-                _spc.InitStack(configurations[Profile]);
+                await _spc.InitStack(configurations[Profile]);
             }
             else
             {
@@ -114,8 +101,6 @@ namespace microstack.Commands.SubCommands
                 return 0;
             }
             
-            OuputToConsole("Apps initialized, Press CTRL+C to exit... \r\n"); 
-
             while(!ct.IsCancellationRequested) { }
 
             return 0;
