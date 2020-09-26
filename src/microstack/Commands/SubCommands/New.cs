@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
+using microstack.configuration.Models;
 using microstack.Models;
 using Newtonsoft.Json;
 

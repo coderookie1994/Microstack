@@ -11,6 +11,13 @@
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Moq" Version="4.14.5" />
+
+    <ProjectReference Include="..\src\microstack.git\microstack.git.csproj" />
+    <ProjectReference Include="..\src\microstack.configuration\microstack.configuration.csproj" />
+    <ProjectReference Include="..\src\microstack\microstack.csproj" />
   </ItemGroup>
 
 </Project>
