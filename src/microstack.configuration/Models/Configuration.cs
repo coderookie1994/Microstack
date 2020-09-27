@@ -4,6 +4,7 @@ namespace microstack.configuration.Models
 {
     public class Configuration
     {
+        public ProcessTypes ProcessType { get; set; }
         public string StartupProjectPath { get; set; }
         public string ProjectName { get; set; }
         public string NextProjectName { get; set; }
@@ -28,5 +29,11 @@ namespace microstack.configuration.Models
                 return (false, $"Required parameter {nameof(GitProjectRootPath)} is missing");
             return (true, string.Empty);
         }
+    }
+
+    public enum ProcessTypes
+    {
+        Dotnet,
+        Node
     }
 }

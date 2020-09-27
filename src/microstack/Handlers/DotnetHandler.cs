@@ -51,20 +51,21 @@ namespace microstack.Handlers
 
         private void BuildProcessObjects()
         {
-            _processInfoObjects = _configurations.Select(p => {
+            _processInfoObjects = _configurations
+                // .Where(c => c.ProcessType.Equals(ProcessTypes.Dotnet))
+                .Select(p => {
+                    var processStartInfo = new ProcessStartInfo();
+                    processStartInfo.UseShellExecute = false;
+                    foreach(var confOverride in p.ConfigOverrides)
+                    {
+                        processStartInfo.Environment.Add(confOverride);
+                    }
+                    processStartInfo.FileName = DotNetExe.FullPathOrDefault();
+                    processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://localhost:{p.Port}\"";
+                    processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
+                    processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
-                var processStartInfo = new ProcessStartInfo();
-                processStartInfo.UseShellExecute = false;
-                foreach(var confOverride in p.ConfigOverrides)
-                {
-                    processStartInfo.Environment.Add(confOverride);
-                }
-                processStartInfo.FileName = DotNetExe.FullPathOrDefault();
-                processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://localhost:{p.Port}\"";
-                processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
-                processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
-
-                return processStartInfo;
+                    return processStartInfo;
             }).ToList();
         }
 
