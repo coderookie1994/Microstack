@@ -17,8 +17,6 @@ namespace microstack.Commands.SubCommands
     )]
     public class New : BaseCommand
     {
-        private ILogger<New> _logger;
-
         [Option(
             CommandOptionType.NoValue,
             Description = "Create a new .mstkc.json file",
@@ -28,9 +26,9 @@ namespace microstack.Commands.SubCommands
         )]
         public bool GenerateMstkcConfig { get; set; }
 
-        public New(ILogger<New> logger)
+        public New(IConsole console)
         {
-            _logger = logger;
+            _console = console;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
@@ -53,24 +51,34 @@ namespace microstack.Commands.SubCommands
                 return;
             
             // TEMPLATE CODE FOR OUTPUT
-            var configuration = new Configuration(){
-                ProjectName = "<<PROJECT NAME>>",
-                NextProjectName = "<<PROJECT NAME OF THE DEPENDENT PROJECT>>",
-                Port = 0,
-                ConfigOverrides = new System.Collections.Generic.Dictionary<string, string>() {
-                    {
-                        "KEY_TO_OVERRIDE", "VALUE_OF_OVERRIDDEN_KEY"
-                    },
-                },
-                GitProjectRootPath = "<<PATH TO GIT ROOT>>",
-                StartupProjectPath = "<<PATH TO STARTUP PROJECT>>",
-            };
+            var configuration = new Dictionary<string, List<Configuration>>()
+            {
+                {
+                    "sample_profile", new List<Configuration>(){
+                        new Configuration(){
+                            ProjectName = "<<PROJECT NAME>>",
+                            NextProjectName = "<<PROJECT NAME OF THE DEPENDENT PROJECT>>",
+                            Port = 0,
+                            ConfigOverrides = new System.Collections.Generic.Dictionary<string, string>() {
+                                {
+                                    "KEY_TO_OVERRIDE", "VALUE_OF_OVERRIDDEN_KEY"
+                                },
+                            },
+                            GitProjectRootPath = "<<PATH TO GIT ROOT>>",
+                            GitRemoteName = "<<REMOTE_NAME>>",
+                            GitUrl = "<<GIT_URL>>",
+                            PullLatest = false,
+                            InMemoryGitFS = false,
+                            StartupProjectPath = "<<PATH TO STARTUP PROJECT>>",
+                        }
+                    }
+                }
+            };    
             try {
-                System.IO.File.WriteAllText(".mstkc.json", JsonConvert.SerializeObject(
-                new List<Configuration>(){configuration}, Formatting.Indented));
+                System.IO.File.WriteAllText(".mstkc_template.json", JsonConvert.SerializeObject(configuration, Formatting.Indented));
             } catch(Exception ex)
             {
-                _logger.LogInformation("Failed to create .mstkc.json", ex.Message);
+                _console.Out.WriteAsync($"Failed to create .mstkc.json {ex.Message}");
             }
             
         }

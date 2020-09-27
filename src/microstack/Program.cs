@@ -28,7 +28,7 @@ namespace microstack
                     services.AddTransient<HandlerExecutor>();
                     services.AddSingleton<ConfigurationProvider>();
                     services.AddTransient<ICredentialProvider, GitCredentialProvider>();
-                    services.AddTransient<GitOps>();
+                    services.AddTransient<IGitOps, GitOps>();
                 })
                 .RunCommandLineApplicationAsync<MicroStack>(args, cts.Token)
                 .GetAwaiter()
