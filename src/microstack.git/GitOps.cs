@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 using microstack.configuration;
@@ -6,7 +7,7 @@ using microstack.git.Abstractions;
 
 namespace microstack.git
 {
-    public class GitOps
+    public class GitOps : IGitOps
     {
         private readonly ICredentialProvider _provider;
         private readonly ConfigurationProvider _configProvider;
@@ -23,21 +24,30 @@ namespace microstack.git
             using (var repo = new Repository(gitRoot))
             {
                 repo.Network.Remotes.Add(gitConfig.GitRemoteName, gitConfig.GitUrl);
-                Commands.Pull(repo, 
+                var refSpec = new List<string>() {$"+refs/heads/*:refs/remotes/{gitConfig.GitRemoteName}/*"};
+
+                Commands.Fetch(repo, gitConfig.GitRemoteName, refSpec, new FetchOptions(){
+                    CredentialsProvider = (url, fromUrl, types) => Credentials()
+                    }, $"Fetching from {gitConfig.GitRemoteName}");
+
+                Commands.Pull(repo,
                     new Signature(_provider.GetCredentials().Username, null, DateTime.Now),
                     new PullOptions()
                     {
-                        FetchOptions = new FetchOptions() { 
+                        FetchOptions = new FetchOptions() {
                             CredentialsProvider = 
-                                (url, fromUrl, types) => new UsernamePasswordCredentials(){
-                                    Username = _provider.GetCredentials().Username,
-                                    Password = _provider.GetCredentials().Token
-                            }
+                                (url, fromUrl, types) => Credentials()
                         }
                     }
                 );
             }
             return Task.CompletedTask;
         }
+
+        private UsernamePasswordCredentials Credentials() => 
+            new UsernamePasswordCredentials() {
+                Username = _provider.GetCredentials().Username, 
+                Password = _provider.GetCredentials().Token
+            };
     }
 }

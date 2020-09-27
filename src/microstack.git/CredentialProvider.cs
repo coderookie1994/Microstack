@@ -2,7 +2,7 @@ using microstack.git.Abstractions;
 
 namespace microstack.git
 {
-    public class CredentialProvider : ICredentialProvider
+    public class GitCredentialProvider : ICredentialProvider
     {
         private string Username { get; set; }
         private string Token { get; set; }

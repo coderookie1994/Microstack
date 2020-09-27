@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using microstack.Abstractions;
 using microstack.configuration.Models;
-using microstack.Extensions;
 
 namespace microstack.Processor
 {
+    /// <summary>
+    /// <para>HandlerExecutor executes all the registered handlers registered in <see cref="Program.cs" /></para>
+    /// </summary>
     public class HandlerExecutor
     {
         private readonly IEnumerable<StackHandler> _handlers;
@@ -22,12 +23,12 @@ namespace microstack.Processor
 
         public async Task Execute(IList<Configuration> configurations, bool isVerbose)
         {
-            PrimeForExecution();
+            SetupForExecution();
             _ = _startHandler ?? throw new InvalidOperationException("No registered handlers");
             await _startHandler.Handle(configurations, isVerbose);
         }
 
-        private void PrimeForExecution()
+        private void SetupForExecution()
         {
            for (var i = 0; i < _handlers.Count() - 1; i++)
             {

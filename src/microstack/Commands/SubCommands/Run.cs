@@ -89,11 +89,27 @@ namespace microstack.Commands.SubCommands
                 return 1;
             }
             if (configurations.Count == 1)
-                await _spc.InitStack(configurations.First().Value);
+            {
+                try {
+                    await _spc.InitStack(configurations.First().Value);
+                } catch(Exception ex)
+                {
+                    OnException(ex);
+                    return 1;
+                }
+
+            }
             if (configurations.ContainsKey(Profile))
             {
                 OuputToConsole($"Selected {Profile} \r\n");
-                await _spc.InitStack(configurations[Profile]);
+
+                try{
+                    await _spc.InitStack(configurations[Profile]);
+                } catch(Exception ex)
+                {
+                    OnException(ex);
+                    return 1;
+                }
             }
             else
             {

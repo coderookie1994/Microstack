@@ -10,7 +10,7 @@ using microstack.configuration.Models;
 
 namespace microstack.Handlers
 {
-    public class ProcessHandler : StackHandler
+    public class DotnetHandler : StackHandler
     {
         private IList<microstack.configuration.Models.Configuration> _configurations;
         private IList<ProcessStartInfo> _processInfoObjects;
@@ -19,11 +19,11 @@ namespace microstack.Handlers
         private Dictionary<string, string> _processNames;
         private readonly IConsole _console;
 
-        public ProcessHandler(IConsole console)
+        public DotnetHandler(IConsole console)
         {
             _console = console;
         }
-        public override Task Handle(IList<Configuration> configurations, bool isVerbose)
+        public async override Task Handle(IList<Configuration> configurations, bool isVerbose)
         {
             _isVerbose = isVerbose;
             _processNames = new Dictionary<string, string>();
@@ -46,7 +46,7 @@ namespace microstack.Handlers
                 _console.ResetColor();
             }
 
-            return Task.CompletedTask;
+            await base.Handle(configurations, isVerbose);
         }
 
         private void BuildProcessObjects()

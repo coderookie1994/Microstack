@@ -7,7 +7,11 @@ namespace microstack.Abstractions
     public abstract class StackHandler
     {
         protected StackHandler next;
-        public abstract Task Handle(IList<Configuration> configurations, bool isVerbose);
+        public virtual async Task Handle(IList<Configuration> configurations, bool isVerbose)
+        {
+            if (next != null)
+                await next.Handle(configurations, isVerbose);
+        }
         public void Next(StackHandler next) => this.next = next;
 
         public StackHandler NextHandler => next;
@@ -17,7 +21,7 @@ namespace microstack.Abstractions
     {
         public async override Task Handle(IList<Configuration> configurations, bool isVerbose)
         {
-            await next.Handle(configurations, isVerbose);    
+            await base.Handle(configurations, isVerbose);    
         }
     }
 }

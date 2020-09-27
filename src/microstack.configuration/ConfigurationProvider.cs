@@ -7,12 +7,10 @@ namespace microstack.configuration
 {
     public class ConfigurationProvider
     {
-        private readonly IList<Configuration> _configurations;
+        private IList<Configuration> _configurations;
 
-        public ConfigurationProvider(IList<Configuration> configurations)
-        {
-            _configurations = configurations;
-        }
+        public void SetConfigurations(IList<Configuration> configurations) 
+            => _configurations = configurations;
 
         public Configuration Configuration(Action<Configuration> searchOptions)
         {
