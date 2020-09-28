@@ -147,6 +147,9 @@ namespace microstack.Commands.SubCommands
 
         private void DetermineEnvironmentPath()
         {
+            // Path takes priority over environment variable
+            if (ConfigFile != null)
+                return;
             if(!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MSTKC_JSON")))
             {
                 ConfigFile = Path.Combine(Environment.GetEnvironmentVariable("MSTKC_JSON"));
