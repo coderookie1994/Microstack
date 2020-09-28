@@ -38,6 +38,7 @@ namespace microstack.BackgroundTasks
             try 
             {
                 var process = Process.Start(processInfoObjectTuples.ProcessInfoObject);
+                _console.Out.WriteLine(process.Id);
                 _processTuples.Add((processInfoObjectTuples.Name, process));
             } catch(Exception ex)
             {

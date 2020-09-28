@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "microstack.Daemon.WindowsService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
