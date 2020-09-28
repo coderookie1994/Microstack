@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using microstack.Abstractions;
+using microstack.BackgroundTasks;
 using microstack.configuration.Models;
 
 namespace microstack.Handlers
@@ -13,13 +14,14 @@ namespace microstack.Handlers
     public class DotnetHandler : StackHandler
     {
         private IList<microstack.configuration.Models.Configuration> _configurations;
-        private IList<ProcessStartInfo> _processInfoObjects;
+        private IList<(string ProjectName, ProcessStartInfo ProcessObject)> _processInfoObjects;
         private IList<Process> _processes = new List<Process>();
         private bool _isVerbose;
         private Dictionary<string, string> _processNames;
         private readonly IConsole _console;
-
-        public DotnetHandler(IConsole console)
+        protected new bool raiseEventOnHandleComplete = true;
+        public DotnetHandler(IConsole console,
+            ProcessSpawnManager processSpawnManager) : base (processSpawnManager)
         {
             _console = console;
         }
@@ -37,16 +39,17 @@ namespace microstack.Handlers
 
             for (var i = 0; i < _processInfoObjects.Count; i++)
             {
-                var process = Process.Start(_processInfoObjects[i]);
-                // process.ErrorDataReceived += new DataReceivedEventHandler(HandleError);
-                _processes.Add(process);
-
-                _console.ForegroundColor = ConsoleColor.Green;
-                _console.Out.WriteLine($"Started {configurations[i].ProjectName} on https://localhost:{configurations[i].Port}");
+                _console.ForegroundColor = ConsoleColor.DarkYellow;
+                _console.Out.WriteLine($"Starting {configurations[i].ProjectName} on https://localhost:{configurations[i].Port}");
                 _console.ResetColor();
             }
 
             await base.Handle(configurations, isVerbose);
+        }
+
+        public override void OnHandleComplete()
+        {
+            processSpawnManager.QueueToSpawn(_processInfoObjects);
         }
 
         private void BuildProcessObjects()
@@ -65,7 +68,7 @@ namespace microstack.Handlers
                     processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
                     processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
-                    return processStartInfo;
+                    return (p.ProjectName, processStartInfo);
             }).ToList();
         }
 

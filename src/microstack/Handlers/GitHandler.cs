@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using microstack.Abstractions;
+using microstack.BackgroundTasks;
 using microstack.configuration;
 using microstack.configuration.Models;
 using microstack.git;
@@ -13,7 +14,8 @@ namespace microstack.Handlers
         private IGitOps _gitOps;
 
         public GitHandler(ConfigurationProvider provider,
-            IGitOps gitOps)
+            IGitOps gitOps,
+            ProcessSpawnManager processSpawnManager) : base(processSpawnManager)
         {
             _provider = provider;
             _gitOps = gitOps;

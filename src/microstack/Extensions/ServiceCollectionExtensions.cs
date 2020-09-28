@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using microstack.Abstractions;
+using microstack.BackgroundTasks;
 using microstack.Processor;
 
 namespace microstack.Extensions
@@ -14,6 +15,7 @@ namespace microstack.Extensions
         ///</summary>
         public static IServiceCollection RegisterHandlers(this IServiceCollection services, Action<HandlerSetup> handlerAction)
         {
+            services.AddSingleton<ProcessSpawnManager>();
             _ = handlerAction ?? throw new ArgumentNullException("Handlers cannot be null");
             var setupHandlers = new HandlerSetup();
             handlerAction(setupHandlers);
@@ -27,6 +29,7 @@ namespace microstack.Extensions
             {
                 services.AddSingleton<StackHandler>(handlerimpl);
             }
+            
             return services;
         }
     }
@@ -48,6 +51,7 @@ namespace microstack.Extensions
                 throw new ArgumentException("Handler already registered");
             _handlerImpl.Add(handlerImpl);
         }
+
         public IList<StackHandler> HandlerImpl => _handlerImpl;
         public IList<Type> Handlers => _handlers;
     }

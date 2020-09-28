@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using microstack.Abstractions;
+using microstack.BackgroundTasks;
 using microstack.Commands;
 using microstack.configuration;
 using microstack.Extensions;
@@ -29,6 +30,8 @@ namespace microstack
                     services.AddSingleton<ConfigurationProvider>();
                     services.AddTransient<ICredentialProvider, GitCredentialProvider>();
                     services.AddTransient<IGitOps, GitOps>();
+                    services.AddSingleton<ProcessQueueTask>();
+                    services.AddHostedService(sp => sp.GetRequiredService<ProcessQueueTask>());
                 })
                 .RunCommandLineApplicationAsync<MicroStack>(args, cts.Token)
                 .GetAwaiter()

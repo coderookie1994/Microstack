@@ -99,7 +99,7 @@ namespace microstack.Commands.SubCommands
                 }
 
             }
-            if (configurations.ContainsKey(Profile))
+            else if (configurations.ContainsKey(Profile))
             {
                 OuputToConsole($"Selected {Profile} \r\n");
 

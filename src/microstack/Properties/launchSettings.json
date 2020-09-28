@@ -3,8 +3,7 @@
     "microstack": {
       "commandName": "Project",
       "executablePath": "C:\\github.com\\mstack\\microstack\\bin\\Debug\\netcoreapp3.1\\microstack.exe",
-      // "commandLineArgs": "config --name confy",
-      "commandLineArgs": "-c .mstkc.json"
+      "commandLineArgs": "run -v -c .mstkc.json -p profile2"
     }
   }
 }

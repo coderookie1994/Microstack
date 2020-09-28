@@ -13,7 +13,7 @@ namespace microstack.Processor
     public class HandlerExecutor
     {
         private readonly IEnumerable<StackHandler> _handlers;
-        private StackHandler _registeredHandler = new StartHandler();
+        private StackHandler _registeredHandler = new StartHandler(null);
         private StackHandler _startHandler;
 
         public HandlerExecutor(IEnumerable<StackHandler> handlers)
@@ -36,7 +36,7 @@ namespace microstack.Processor
                 var nextHandler = _handlers.ElementAt(i+1);
                 if (_startHandler is null)
                 {
-                    _startHandler = new StartHandler();
+                    _startHandler = new StartHandler(null);
                     _startHandler.Next(handler);
                 }
                 _registeredHandler = handler;
