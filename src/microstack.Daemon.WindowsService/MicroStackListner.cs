@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,10 +11,10 @@ namespace microstack.Daemon.WindowsService
 {
     public class MicroStackListner : BackgroundService
     {
-        private BlockingCollection<int> _newProcesses;
-        public MicroStackListner()
+        private readonly ProcessStateManager _processStateManager;
+        public MicroStackListner(ProcessStateManager processStateManager)
         {
-            _newProcesses = new BlockingCollection<int>();
+            _processStateManager = processStateManager;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -24,12 +26,15 @@ namespace microstack.Daemon.WindowsService
         {
             while(!stoppingToken.IsCancellationRequested)
             {
+                var p = Process.GetProcessesByName("microstack");
                 using (var pipe = new NamedPipeServerStream("microstack_pipe", PipeDirection.InOut, 5))
                 {
                     var managedThread = Thread.CurrentThread.ManagedThreadId;
                     await pipe.WaitForConnectionAsync();
+                    Console.WriteLine("Connected");
                     var processContract = Serializer.Deserialize<ProcessContract>(pipe);
-                    _newProcesses.Add(processContract.ProcessId);
+                    _processStateManager.AddProcess(processContract.ProcessId, processContract.MicroStackPID);
+                    pipe.Disconnect();
                 }
             }
         }

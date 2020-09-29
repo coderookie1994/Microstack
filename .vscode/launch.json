@@ -23,6 +23,18 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
+        },
+        {
+            "name": ".NET Core WindowService (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "windows_service_build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/microstack.Daemon.WindowsService/bin/Debug/netcoreapp3.1/microstack.Daemon.WindowsService.dll",
+            "cwd": "${workspaceFolder}/src/microstack.Daemon.WindowsService",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
         }
     ]
 }

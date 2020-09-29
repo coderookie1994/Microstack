@@ -19,7 +19,8 @@ namespace microstack.Daemon.WindowsService
             .UseWindowsService()
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddHostedService<Worker>();
+                services.AddHostedService<MicroStackListner>();
+                services.AddSingleton<ProcessStateManager>();
             });
     }
 }

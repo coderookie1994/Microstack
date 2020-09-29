@@ -2,7 +2,7 @@ namespace microstack.Daemon.WindowsService
 {
     public enum ProcessMarkers
     {
-        New,
+        Green,
         Grey,
         Black
     }
