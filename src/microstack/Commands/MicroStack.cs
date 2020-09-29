@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Hosting;
 using microstack.Commands.SubCommands;
 
 namespace microstack.Commands
@@ -11,6 +12,12 @@ namespace microstack.Commands
     [Subcommand(typeof(New))]
     public class MicroStack : BaseCommand
     {
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
+
+        public MicroStack(IHostApplicationLifetime hostApplicationLifetime)
+        {
+            this._hostApplicationLifetime = hostApplicationLifetime;
+        }
         protected async override Task<int> OnExecute(CommandLineApplication app)
         {
             app.ShowHelp();

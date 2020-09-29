@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using microstack.Abstractions;
