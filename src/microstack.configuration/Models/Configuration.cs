@@ -14,6 +14,7 @@ namespace microstack.configuration.Models
         public bool PullLatest { get; set; }
         public bool InMemoryGitFS { get; set; }
         public int Port { get; set; }
+        public string HostName { get; set; }
         public bool Verbose { get; set; }
         public Dictionary<string, string> ConfigOverrides { get; set; }
 

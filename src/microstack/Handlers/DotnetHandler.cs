@@ -40,7 +40,16 @@ namespace microstack.Handlers
             for (var i = 0; i < _processInfoObjects.Count; i++)
             {
                 _console.ForegroundColor = ConsoleColor.DarkYellow;
-                _console.Out.WriteLine($"Starting {configurations[i].ProjectName} on https://localhost:{configurations[i].Port}");
+                _console.Out.WriteLine($"Starting {configurations[i].ProjectName} on https://{configurations[i].HostName ?? "localhost"}:{configurations[i].Port}");
+                
+                _console.ForegroundColor = ConsoleColor.DarkYellow;
+                _console.Out.WriteLine("Configurations overridden");
+                _console.ForegroundColor = ConsoleColor.Green;
+
+                foreach(var config in configurations[i].ConfigOverrides)
+                {
+                    _console.Out.WriteLine($"\t {config.Key}: {config.Value}");
+                }
                 _console.ResetColor();
             }
 

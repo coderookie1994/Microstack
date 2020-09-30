@@ -46,22 +46,28 @@ namespace microstack.BackgroundTasks
             {
                 var process = Process.Start(processInfoObjectTuples.ProcessInfoObject);
                 _processTuples.Add((processInfoObjectTuples.Name, process));
-                using(var pipe = new NamedPipeClientStream(".", "microstack_pipe", PipeDirection.InOut, PipeOptions.None))
+                
+                // Let users control registration if daemon fails
+                bool.TryParse(Environment.GetEnvironmentVariable("DISABLE_MSTCK_PID_REG"), out var daemonRegistraction);
+
+                if (!daemonRegistraction)
                 {
-                    try{
-                        pipe.Connect(5);
-                        ProtoBuf.Serializer.Serialize(pipe, new ProcessContract() {ProcessId = process.Id, MicroStackPID = Process.GetCurrentProcess().Id});
-                    }
-                    catch (TimeoutException ex)
+                    using(var pipe = new NamedPipeClientStream(".", "microstack_pipe", PipeDirection.InOut, PipeOptions.None))
                     {
-                        _console.ForegroundColor = ConsoleColor.DarkRed;
-                        _console.Out.WriteLine($"Failed to register {processInfoObjectTuples.Name} with PID {process.Id} with Microstack Daemon, please ensure that Microstack Windows service is running by manually starting it or reinstalling Microstack");
-                    }
-                    finally
-                    {
-                        _console.Out.WriteLine($"Killing {processInfoObjectTuples.Name}");
-                        process.Kill(true);
-                        throw new Exception("Failed to connect to Microstack Daemon");
+                        try{
+                            pipe.Connect(5);
+                            _console.Out.WriteLine($"Registering {processInfoObjectTuples.Name} PID {process.Id} with Microstack Daemon");
+                            ProtoBuf.Serializer.Serialize(pipe, new ProcessContract() {ProcessId = process.Id, MicroStackPID = Process.GetCurrentProcess().Id});
+                            _console.ResetColor();
+                        }
+                        catch (TimeoutException ex)
+                        {
+                            _console.ForegroundColor = ConsoleColor.DarkRed;
+                            _console.Out.WriteLine($"Failed to register {processInfoObjectTuples.Name} with PID {process.Id} with Microstack Daemon, please ensure that Microstack Windows service is running by manually starting it or reinstalling Microstack");
+                            _console.Out.WriteLine($"Killing {processInfoObjectTuples.Name}");
+                            process.Kill(true);
+                            throw new Exception("Failed to connect to Microstack Daemon");
+                        }
                     }
                 }
             } catch(Exception ex)
