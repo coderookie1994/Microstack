@@ -29,7 +29,7 @@ namespace microstack.BackgroundTasks
         public (string Name, ProcessStartInfo ProcessInfoObject) Dequeue()
         {
             var processObjectTuple = new List<(string Name, ProcessStartInfo ProcessObject)>();
-            if (_bc.Count > 0)
+            if (_bc?.Count > 0)
                 return _bc.Take();
                 
             return (null, null);

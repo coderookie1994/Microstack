@@ -16,12 +16,12 @@ namespace microstack.BackgroundTasks
         private Timer _timer;
         private readonly ProcessSpawnManager _processSpawnManager;
         private readonly IConsole _console;
-        private readonly IApplicationLifetime _lifetime;
+        private readonly IHostApplicationLifetime _lifetime;
         private IList<(string Name, Process Process)> _processTuples;
 
         public ProcessQueueTask(ProcessSpawnManager processSpawnManager,
             IConsole console,
-            IApplicationLifetime lifetime)
+            IHostApplicationLifetime lifetime)
         {
             this._processSpawnManager = processSpawnManager;
             _processTuples = new List<(string Name, Process Process)>();
@@ -72,7 +72,7 @@ namespace microstack.BackgroundTasks
                 }
             } catch(Exception ex)
             {
-                _console.ForegroundColor = ConsoleColor.Red;
+                _console.ForegroundColor = ConsoleColor.DarkRed;
                 _console.Out.WriteLine($"Failed to spawn {processInfoObjectTuples.Name}, {ex.Message}");
                 _console.ResetColor();
                 _lifetime.StopApplication();
@@ -90,7 +90,7 @@ namespace microstack.BackgroundTasks
 
                 }
                 finally{
-                    _console.Out.WriteLine($"Killing {processTuple.Name}");
+                    _console.Out.WriteLine($"Stopping {processTuple.Name}");
                 }
             }
             return Task.CompletedTask;
