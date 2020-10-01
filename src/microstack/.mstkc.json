@@ -26,6 +26,19 @@
         "Test": "FromOverridenKey",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    {
+      "StartupProjectPath": "C:\\github.com\\testapp2",
+      "ProjectName": "testapp2",
+      "NextProjectName": "",
+      "GitProjectRootPath": "C:\\github.com\\testapp2",
+      "PullLatest": false,
+      "Port": 5003,
+      "Verbose": false,
+      "ConfigOverrides": {
+        "Test": "FromOverridenKey2",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   ]
 }
