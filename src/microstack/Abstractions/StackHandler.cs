@@ -34,9 +34,9 @@ namespace microstack.Abstractions
         public StackHandler NextHandler => next;
     }
 
-    public class StartHandler : StackHandler
+    public class BootstrapHandler : StackHandler
     {
-        public StartHandler(ProcessSpawnManager processSpawnManager) : base(processSpawnManager)
+        public BootstrapHandler(ProcessSpawnManager processSpawnManager) : base(processSpawnManager)
         {
         }
 

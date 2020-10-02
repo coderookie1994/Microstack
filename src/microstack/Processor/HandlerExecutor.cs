@@ -13,8 +13,8 @@ namespace microstack.Processor
     public class HandlerExecutor
     {
         private readonly IEnumerable<StackHandler> _handlers;
-        private StackHandler _registeredHandler = new StartHandler(null);
-        private StackHandler _startHandler;
+        private StackHandler _handlerPointer = new BootstrapHandler(null);
+        private StackHandler _bootstrapHandler;
 
         public HandlerExecutor(IEnumerable<StackHandler> handlers)
         {
@@ -24,8 +24,8 @@ namespace microstack.Processor
         public async Task Execute(IList<Configuration> configurations, bool isVerbose)
         {
             SetupForExecution();
-            _ = _startHandler ?? throw new InvalidOperationException("No registered handlers");
-            await _startHandler.Handle(configurations, isVerbose);
+            _ = _bootstrapHandler ?? throw new InvalidOperationException("No registered handlers");
+            await _bootstrapHandler.Handle(configurations, isVerbose);
         }
 
         private void SetupForExecution()
@@ -34,13 +34,13 @@ namespace microstack.Processor
             {
                 var handler = _handlers.ElementAt(i);
                 var nextHandler = _handlers.ElementAt(i+1);
-                if (_startHandler is null)
+                if (_bootstrapHandler is null)
                 {
-                    _startHandler = new StartHandler(null);
-                    _startHandler.Next(handler);
+                    _bootstrapHandler = new BootstrapHandler(null);
+                    _bootstrapHandler.Next(handler);
                 }
-                _registeredHandler = handler;
-                _registeredHandler.Next(nextHandler);
+                _handlerPointer = handler;
+                _handlerPointer.Next(nextHandler);
             }
         }
     }

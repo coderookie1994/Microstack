@@ -73,7 +73,7 @@ namespace microstack.configuration
                 }
             } catch(Exception ex)
             {
-                throw new InvalidDataException($"Invalid configuration file format {ex.Message}");
+                throw new InvalidDataException($"Invalid configuration file format. {ex.Message}");
             }
         }
 
