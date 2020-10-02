@@ -15,17 +15,18 @@ namespace microstack.Handlers
 
         public GitHandler(ConfigurationProvider provider,
             IGitOps gitOps,
-            ProcessSpawnManager processSpawnManager) : base(processSpawnManager)
+            ProcessSpawnManager processSpawnManager,
+            ConfigurationProvider configProvider) : base(processSpawnManager, configProvider)
         {
             _provider = provider;
             _gitOps = gitOps;
         }
-        public async override Task Handle(IList<Configuration> configurations, bool isVerbose)
+        public async override Task Handle(bool isVerbose)
         {
             // if (next != null)
             //     await next.Handle(configurations, isVerbose);
             
-            await base.Handle(configurations, isVerbose);
+            await base.Handle(isVerbose);
         }
 
         private void Validate(IList<Configuration> configurations)

@@ -13,12 +13,12 @@ namespace microstack.configuration
         private string _configFile;
         private string _profile;
         private IList<Configuration> _selectedConfigurations;
+        private FileSystemWatcher _fileSystemWatcher;
 
         public bool IsValid { get; private set; }
         public bool IsContextSet { get; private set; }
-
         public IList<Configuration> Configurations => _selectedConfigurations;
-
+        public event EventHandler<ConfigurationEventArgs> OnConfigurationChange;
         public void SetContext(string configFile, string profile)
         {
             // Extract config from either path or env
@@ -55,6 +55,13 @@ namespace microstack.configuration
                 _selectedConfigurations = _configurations[_profile];
             else if (_configurations.Count == 1)
                 _selectedConfigurations = _configurations.FirstOrDefault().Value;
+
+            // Setup FileSystem events to watch for changes in a profile configuration
+            _fileSystemWatcher = new FileSystemWatcher();
+            _fileSystemWatcher.Path = Path.Combine(Directory.GetCurrentDirectory());
+            _fileSystemWatcher.Filter = Path.Combine(_configFile);
+            _fileSystemWatcher.Changed += OnChange;
+            _fileSystemWatcher.EnableRaisingEvents = true;
         }
 
         private void ExtractConfigFromPath(string path)
@@ -84,8 +91,25 @@ namespace microstack.configuration
                 var path = Path.Combine(Environment.GetEnvironmentVariable("MSTCK_JSON"));
                 if (!File.Exists(path))
                     throw new FileNotFoundException($"Config file not found at {path}");
+                _configFile = path;
                 ExtractConfigFromPath(path);
             }
+        }
+
+        private void OnChange(object sender, FileSystemEventArgs e)
+        {
+            var configurations = JsonConvert.DeserializeObject<Dictionary<string, IList<Configuration>>>(File.ReadAllText(Path.Combine(_configFile)));
+            
+            EventHandler<ConfigurationEventArgs> handler = OnConfigurationChange;
+            ConfigurationEventArgs configChangeArgs;
+
+            if (!string.IsNullOrWhiteSpace(_profile))
+                configChangeArgs = new ConfigurationEventArgs(){ UpdatedConfiguration = configurations[_profile] };
+            else
+                configChangeArgs = new ConfigurationEventArgs() { UpdatedConfiguration = configurations.FirstOrDefault().Value };
+            
+            if (handler != null)
+                handler(null, configChangeArgs);
         }
     }
 }

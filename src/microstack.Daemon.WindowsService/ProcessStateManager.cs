@@ -48,6 +48,7 @@ namespace microstack.Daemon.WindowsService
                 }
                 
                 var processStateIndex = _states.FindIndex(s => s.PID.Equals(args.PID));
+                Console.WriteLine($"Marking {args.PID} for removal");
                 _queueToRemove.Add(processStateIndex);                
             }
         }
@@ -67,7 +68,9 @@ namespace microstack.Daemon.WindowsService
                 {
                     var index = _queueToRemove.Take();
                     if (index < _states.Count)
+                    {
                         _states.RemoveAt(index);
+                    }
                 }
             }
             

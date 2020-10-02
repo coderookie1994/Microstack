@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AnyDiff.Extensions;
 using McMaster.Extensions.CommandLineUtils;
 using microstack.Abstractions;
 using microstack.BackgroundTasks;
+using microstack.configuration;
 using microstack.configuration.Models;
 
 namespace microstack.Handlers
@@ -21,15 +23,17 @@ namespace microstack.Handlers
         private readonly IConsole _console;
         protected new bool raiseEventOnHandleComplete = true;
         public DotnetHandler(IConsole console,
-            ProcessSpawnManager processSpawnManager) : base (processSpawnManager)
+            ProcessSpawnManager processSpawnManager,
+            ConfigurationProvider configurationProvider) : base (processSpawnManager, configurationProvider)
         {
             _console = console;
+            configurationProvider.OnConfigurationChange += ConfigurationChanged;
         }
-        public async override Task Handle(IList<Configuration> configurations, bool isVerbose)
+        public async override Task Handle(bool isVerbose)
         {
             _isVerbose = isVerbose;
             _processNames = new Dictionary<string, string>();
-            _configurations = configurations;
+            _configurations = configurationProvider.Configurations;
 
             _console.ForegroundColor = ConsoleColor.DarkYellow;
             _console.Out.WriteLine("Initializing apps ... \r\n"); 
@@ -40,20 +44,20 @@ namespace microstack.Handlers
             for (var i = 0; i < _processInfoObjects.Count; i++)
             {
                 _console.ForegroundColor = ConsoleColor.DarkYellow;
-                _console.Out.WriteLine($"Starting {configurations[i].ProjectName} on https://{configurations[i].HostName ?? "localhost"}:{configurations[i].Port}");
+                _console.Out.WriteLine($"Starting {_configurations[i].ProjectName} on https://{_configurations[i].HostName ?? "localhost"}:{_configurations[i].Port}");
                 
                 _console.ForegroundColor = ConsoleColor.DarkYellow;
                 _console.Out.WriteLine("Configurations overridden");
                 _console.ForegroundColor = ConsoleColor.Green;
 
-                foreach(var config in configurations[i].ConfigOverrides)
+                foreach(var config in _configurations[i].ConfigOverrides)
                 {
                     _console.Out.WriteLine($"\t {config.Key}: {config.Value}");
                 }
                 _console.ResetColor();
             }
 
-            await base.Handle(configurations, isVerbose);
+            await base.Handle(isVerbose);
         }
 
         public override void OnHandleComplete()
@@ -88,6 +92,20 @@ namespace microstack.Handlers
             if (verboseProcess)
                 return false;
             return true;
+        }
+
+        private void ConfigurationChanged(object sender, ConfigurationEventArgs e)
+        {
+            // var changeInProjects = new HashSet<string>();
+
+            // var diff = _configurations.Diff(e.UpdatedConfiguration);
+            // foreach(var difference in diff)
+            // {
+            //     if (difference.Delta != null)
+            //     {
+            //         if (difference.Property)
+            //     }
+            // }
         }
     }
 }

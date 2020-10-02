@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using microstack.BackgroundTasks;
+using microstack.configuration;
 using microstack.configuration.Models;
 
 namespace microstack.Abstractions
@@ -11,18 +12,20 @@ namespace microstack.Abstractions
     {
         protected StackHandler next;
         protected ProcessSpawnManager processSpawnManager;
-
+        protected ConfigurationProvider configurationProvider;
         protected bool raiseEventOnHandleComplete;
 
-        public StackHandler(ProcessSpawnManager processSpawnManager)
+        public StackHandler(ProcessSpawnManager processSpawnManager,
+        ConfigurationProvider configProvider)
         {
             this.processSpawnManager = processSpawnManager;
+            this.configurationProvider = configProvider;
         }
-        public virtual async Task Handle(IList<Configuration> configurations, bool isVerbose)
+        public virtual async Task Handle(bool isVerbose)
         {
             OnHandleComplete();
             if (next != null)
-                await next.Handle(configurations, isVerbose);
+                await next.Handle(isVerbose);
         }
 
         public virtual void OnHandleComplete()
@@ -36,13 +39,13 @@ namespace microstack.Abstractions
 
     public class BootstrapHandler : StackHandler
     {
-        public BootstrapHandler(ProcessSpawnManager processSpawnManager) : base(processSpawnManager)
+        public BootstrapHandler(ProcessSpawnManager processSpawnManager, ConfigurationProvider configProvider) : base(processSpawnManager, configProvider)
         {
         }
 
-        public async override Task Handle(IList<Configuration> configurations, bool isVerbose)
+        public async override Task Handle(bool isVerbose)
         {
-            await base.Handle(configurations, isVerbose);    
+            await base.Handle(isVerbose);    
         }
     }
 }

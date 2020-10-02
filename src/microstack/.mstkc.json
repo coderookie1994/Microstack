@@ -17,7 +17,7 @@
     {
       "StartupProjectPath": "C:\\github.com\\testapp",
       "ProjectName": "testapp",
-      "NextProjectName": "",
+      "NextProjectName": "x",
       "GitProjectRootPath": "C:\\github.com\\testapp",
       "PullLatest": false,
       "Port": 5002,

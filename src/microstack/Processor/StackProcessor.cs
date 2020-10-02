@@ -32,7 +32,7 @@ namespace microstack.Processor
         public void SetVerbosity(bool isVerbose) => _isVerbose = isVerbose;
         public async Task InitStack()
         {
-            await _executor.Execute(_configProvider.Configurations, _isVerbose);
+            await _executor.Execute(_isVerbose);
             await _console.Out.WriteLineAsync("Press CTRL+C to exit... \r\n");
         }
     }
