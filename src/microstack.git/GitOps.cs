@@ -20,27 +20,27 @@ namespace microstack.git
         }
         public Task Pull(string gitRoot)
         {
-            var gitConfig = _configProvider.Configuration(c => c.GitProjectRootPath = gitRoot);
-            using (var repo = new Repository(gitRoot))
-            {
-                repo.Network.Remotes.Add(gitConfig.GitRemoteName, gitConfig.GitUrl);
-                var refSpec = new List<string>() {$"+refs/heads/*:refs/remotes/{gitConfig.GitRemoteName}/*"};
+            // var gitConfig = _configProvider.Configuration(c => c.GitProjectRootPath = gitRoot);
+            // using (var repo = new Repository(gitRoot))
+            // {
+            //     repo.Network.Remotes.Add(gitConfig.GitRemoteName, gitConfig.GitUrl);
+            //     var refSpec = new List<string>() {$"+refs/heads/*:refs/remotes/{gitConfig.GitRemoteName}/*"};
 
-                Commands.Fetch(repo, gitConfig.GitRemoteName, refSpec, new FetchOptions(){
-                    CredentialsProvider = (url, fromUrl, types) => Credentials()
-                    }, $"Fetching from {gitConfig.GitRemoteName}");
+            //     Commands.Fetch(repo, gitConfig.GitRemoteName, refSpec, new FetchOptions(){
+            //         CredentialsProvider = (url, fromUrl, types) => Credentials()
+            //         }, $"Fetching from {gitConfig.GitRemoteName}");
 
-                Commands.Pull(repo,
-                    new Signature(_provider.GetCredentials().Username, null, DateTime.Now),
-                    new PullOptions()
-                    {
-                        FetchOptions = new FetchOptions() {
-                            CredentialsProvider = 
-                                (url, fromUrl, types) => Credentials()
-                        }
-                    }
-                );
-            }
+            //     Commands.Pull(repo,
+            //         new Signature(_provider.GetCredentials().Username, null, DateTime.Now),
+            //         new PullOptions()
+            //         {
+            //             FetchOptions = new FetchOptions() {
+            //                 CredentialsProvider = 
+            //                     (url, fromUrl, types) => Credentials()
+            //             }
+            //         }
+            //     );
+            // }
             return Task.CompletedTask;
         }
 

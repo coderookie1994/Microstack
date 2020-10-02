@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
+using microstack.configuration;
 using microstack.configuration.Models;
 using microstack.Processor;
 using Newtonsoft.Json;
@@ -19,7 +20,6 @@ namespace microstack.Commands.SubCommands
     public class Run : BaseCommand
     {
         private StackProcessor _spc;
-        private IHostEnvironment _env;
         private IHostApplicationLifetime _lifetime;
 
         [Option(
@@ -53,15 +53,17 @@ namespace microstack.Commands.SubCommands
         public string Profile { get; set; }
         
         private Dictionary<string, List<Configuration>> _configurations;
+        private ConfigurationProvider _configProvider;
+
         public Run(StackProcessor spc, 
-            IHostEnvironment env, 
             IHostApplicationLifetime lifetime,
-            IConsole console)
+            IConsole console,
+            ConfigurationProvider configProvider)
         {
             _spc = spc;
-            _env = env;
             _lifetime = lifetime;
             _console = console;
+            _configProvider = configProvider;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
@@ -69,22 +71,29 @@ namespace microstack.Commands.SubCommands
             var ct = _lifetime.ApplicationStopping;
             _spc.SetVerbosity(Verbose);
 
-            // Set source
-            if (SetConfigFromSource(app) == 1)
-                return 1;
-
-            // Validate config
-            if (ValidateConfig() == 1)
-                return 1;
-            
-            if (ConfigFile != null)
+            try {
+                _configProvider.SetContext(ConfigFile, Profile);
+                var validationResult = _configProvider.Validate();
+                if (validationResult.ReturnCode == 1)
+                {
+                    OutputError(validationResult.Message);
+                    return 1;
+                }
+            } catch(Exception ex)
             {
-                // var fileSystemEvents = new FileSystemWatcher(ConfigFile);
-                // fileSystemEvents.Changed += OnFileChanged;
+                OnException(ex);
+                return 1;
             }
 
+            _configProvider.SetConfigurationContext();
             // Start stack
-            await StartStack();
+            try {
+                await _spc.InitStack();
+            } catch(Exception ex)
+            {
+                OnException(ex);
+                return 1;
+            }
 
             // Loop until CTRL+C is pressed
             while(!ct.IsCancellationRequested) { }
@@ -92,96 +101,6 @@ namespace microstack.Commands.SubCommands
             _console.ResetColor();
             _console.Out.WriteLine("\r\nMicrostack stopping...\r\n");
             return 0;
-        }
-
-        private Dictionary<string, List<Configuration>> ExtractConfigFromPath()
-        {       
-            try {
-                _configurations = JsonConvert.DeserializeObject<Dictionary<string, List<Configuration>>>(File.ReadAllText(Path.Combine(ConfigFile)));
-                foreach(var profile in _configurations)
-                {
-                    var validationResult = profile.Value.Select(c => c.Validate());
-                    if (validationResult.Any(v => v.IsValid == false))
-                        throw new InvalidDataException();
-                }
-            } catch(Exception ex)
-            {
-                throw new InvalidDataException("Invalid configuration file format");
-            }
-
-            return _configurations;
-        }
-
-        private void GetFromEnvironmentPath()
-        {
-            if(!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MSTCK_JSON")))
-            {
-                ConfigFile = Path.Combine(Environment.GetEnvironmentVariable("MSTCK_JSON"));
-                if (!File.Exists(ConfigFile))
-                    throw new FileNotFoundException($"Config file not found at {ConfigFile}");
-                _configurations = JsonConvert.DeserializeObject<Dictionary<string, List<Configuration>>>(File.ReadAllText(Path.Combine(ConfigFile)));
-            }
-        }
-
-        private int SetConfigFromSource(CommandLineApplication app)
-        {
-            try {
-                // Path takes priority over env
-                if (ConfigFile != null)
-                    ExtractConfigFromPath();
-                else
-                    GetFromEnvironmentPath();
-                if (_configurations == null || _configurations.Count == 0)
-                {
-                    app.ShowHelp();
-                    return 1;
-                }
-            } catch (Exception ex)
-            {
-                OnException(ex);
-                return 1;
-            }
-            return 0;
-        }
-
-        private int ValidateConfig()
-        {
-            if (_configurations.Count > 1 && string.IsNullOrWhiteSpace(Profile))
-            {
-                OutputError("Multiple profiles found use -p to specify profile to use");
-                return 1;
-            }
-            else if (_configurations.ContainsKey(Profile))
-            {
-                OuputToConsole($"Selected {Profile} \r\n");
-            }
-            else
-            {
-                OutputError($"{Profile} not found in configuration \r\n");
-                return 1;
-            }
-            return 0;
-        }
-
-        private async Task<int> StartStack()
-        {
-            try {
-                if (_configurations.Count == 1)
-                    await _spc.InitStack(_configurations.First().Value);
-                else if (Profile != null)
-                    await _spc.InitStack(_configurations[Profile]);
-            } catch(Exception ex)
-            {
-                OnException(ex);
-                return 1;
-            }
-
-            return 0;
-        }
-
-        private void OnFileChanged(object sender, FileSystemEventArgs e)
-        {
-            
         }
     }
 }

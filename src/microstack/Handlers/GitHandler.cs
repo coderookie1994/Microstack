@@ -22,8 +22,6 @@ namespace microstack.Handlers
         }
         public async override Task Handle(IList<Configuration> configurations, bool isVerbose)
         {
-            _provider.SetConfigurations(configurations);
-
             // if (next != null)
             //     await next.Handle(configurations, isVerbose);
             
