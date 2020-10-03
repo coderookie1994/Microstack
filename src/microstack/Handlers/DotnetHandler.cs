@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AnyDiff.Extensions;
 using McMaster.Extensions.CommandLineUtils;
@@ -36,28 +37,32 @@ namespace microstack.Handlers
             _configurations = configurationProvider.Configurations;
 
             _console.ForegroundColor = ConsoleColor.DarkYellow;
-            _console.Out.WriteLine("Initializing apps ... \r\n"); 
+            _console.Out.WriteLine("Initializing apps ... \r\n");
             _console.ResetColor();
 
             BuildProcessObjects();
+            ConsoleOutObjectConfigurations();
 
+            await base.Handle(isVerbose);
+        }
+
+        private void ConsoleOutObjectConfigurations()
+        {
             for (var i = 0; i < _processInfoObjects.Count; i++)
             {
                 _console.ForegroundColor = ConsoleColor.DarkYellow;
                 _console.Out.WriteLine($"Starting {_configurations[i].ProjectName} on https://{_configurations[i].HostName ?? "localhost"}:{_configurations[i].Port}");
-                
+
                 _console.ForegroundColor = ConsoleColor.DarkYellow;
                 _console.Out.WriteLine("Configurations overridden");
                 _console.ForegroundColor = ConsoleColor.Green;
 
-                foreach(var config in _configurations[i].ConfigOverrides)
+                foreach (var config in _configurations[i].ConfigOverrides)
                 {
                     _console.Out.WriteLine($"\t {config.Key}: {config.Value}");
                 }
                 _console.ResetColor();
             }
-
-            await base.Handle(isVerbose);
         }
 
         public override void OnHandleComplete()
@@ -94,18 +99,14 @@ namespace microstack.Handlers
             return true;
         }
 
-        private void ConfigurationChanged(object sender, ConfigurationEventArgs e)
+        private async void ConfigurationChanged(object sender, ConfigurationEventArgs e)
         {
-            // var changeInProjects = new HashSet<string>();
-
-            // var diff = _configurations.Diff(e.UpdatedConfiguration);
-            // foreach(var difference in diff)
-            // {
-            //     if (difference.Delta != null)
-            //     {
-            //         if (difference.Property)
-            //     }
-            // }
+            processSpawnManager.SigKill(_processInfoObjects.Select(p => p.ProjectName));
+            _console.Out.WriteLine($"Restarting dotnet processes...");
+            _configurations = e.UpdatedConfiguration;          
+            BuildProcessObjects();
+            ConsoleOutObjectConfigurations();
+            OnHandleComplete();
         }
     }
 }

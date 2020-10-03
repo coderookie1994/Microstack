@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Pipes;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
@@ -13,7 +14,8 @@ namespace microstack.BackgroundTasks
     public class ProcessQueueTask : IHostedService, IDisposable
     {
         private CancellationToken _cancellationToken;
-        private Timer _timer;
+        private Timer _spawnQueueScheduler;
+        private Timer _killQueueScheduler;
         private readonly ProcessSpawnManager _processSpawnManager;
         private readonly IConsole _console;
         private readonly IHostApplicationLifetime _lifetime;
@@ -31,7 +33,9 @@ namespace microstack.BackgroundTasks
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
-            _timer = new Timer(SpawnQueuedProcess, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            _spawnQueueScheduler = new Timer(SpawnQueuedProcess, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            _killQueueScheduler = new Timer(KillRequestedProcesses, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+
             return Task.CompletedTask;
         }
 
@@ -76,6 +80,22 @@ namespace microstack.BackgroundTasks
                 _console.Out.WriteLine($"Failed to spawn {processInfoObjectTuples.Name}, {ex.Message}");
                 _console.ResetColor();
                 _lifetime.StopApplication();
+            }
+        }
+
+        public void KillRequestedProcesses(object state)
+        {
+            var processToKill = _processSpawnManager.DequeueKillRequests();
+
+            try {
+                var pt = _processTuples.FirstOrDefault(t => t.Name.Equals(processToKill));
+                if (pt.Name != null)
+                {
+                    pt.Process.Kill(true);
+                    _processTuples.Remove(pt);
+                }
+            } catch(Exception ex) {
+
             }
         }
 

@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using microstack.configuration.Models;
 using Newtonsoft.Json;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace microstack.configuration
 {
@@ -18,11 +19,20 @@ namespace microstack.configuration
         private IList<Configuration> _selectedConfigurations;
         private FileSystemWatcher _fileSystemWatcher;
         private byte[] _lastComputedHash = new byte[]{};
+        private Timer _watcherThread;
+        private object _lockObj = new object();
+        private IConsole _console;
+        private long _lastWrite;
 
         public bool IsValid { get; private set; }
         public bool IsContextSet { get; private set; }
         public IList<Configuration> Configurations => _selectedConfigurations;
         public event EventHandler<ConfigurationEventArgs> OnConfigurationChange;
+
+        public ConfigurationProvider(IConsole console)
+        {
+            _console = console;
+        }
         public void SetContext(string configFile, string profile)
         {
             // Extract config from either path or env
@@ -59,33 +69,41 @@ namespace microstack.configuration
                 _selectedConfigurations = _configurations[_profile];
             else if (_configurations.Count == 1)
                 _selectedConfigurations = _configurations.FirstOrDefault().Value;
-
-            // Setup FileSystem events to watch for changes in a profile configuration
-            _fileSystemWatcher = new FileSystemWatcher();
-            _fileSystemWatcher.Path = Path.Combine(Directory.GetCurrentDirectory());
-            _fileSystemWatcher.Filter = Path.Combine(_configFile);
-            _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size;
-            _fileSystemWatcher.Changed += OnChange;
-            _fileSystemWatcher.EnableRaisingEvents = true;
+            Console.WriteLine("Setting up watcher");
+            
+            // _fileSystemWatcher = new FileSystemWatcher();
+            // _fileSystemWatcher.Path = Path.Combine(Directory.GetCurrentDirectory());
+            // _fileSystemWatcher.Filter = Path.Combine(_configFile);
+            // _fileSystemWatcher.Changed += WatchForChange;
+            // _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Attributes;
+            // _fileSystemWatcher.EnableRaisingEvents = true;
+            _watcherThread = new Timer(WatchForChange, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
         }
 
         private void ExtractConfigFromPath(string path)
         {       
             try {
                 _configurations = JsonConvert.DeserializeObject<Dictionary<string, IList<Configuration>>>(File.ReadAllText(Path.Combine(path)));
-                foreach(var profile in _configurations)
-                {
-                    var validationResult = profile.Value.Select(c => c.Validate());
-                    var hasDistinctProjectNames = profile.Value.Select(c => c.ProjectName).Distinct().Count() == profile.Value.Count();
-
-                    if (validationResult.Any(v => v.IsValid == false))
-                        throw new InvalidDataException();
-                    if (!hasDistinctProjectNames)
-                        throw new InvalidDataException($"Project names in a profile have to be unique");
-                }
+                // _lastComputedHash = ComputeHash(path);
+                ValidateProfileAndConfigurations();
+                _lastWrite = File.GetLastWriteTime(_configFile).ToFileTimeUtc();
             } catch(Exception ex)
             {
                 throw new InvalidDataException($"Invalid configuration file format. {ex.Message}");
+            }
+        }
+
+        private void ValidateProfileAndConfigurations()
+        {
+            foreach(var profile in _configurations)
+            {
+                var validationResult = profile.Value.Select(c => c.Validate());
+                var hasDistinctProjectNames = profile.Value.Select(c => c.ProjectName).Distinct().Count() == profile.Value.Count();
+
+                if (validationResult.Any(v => v.IsValid == false))
+                    throw new InvalidDataException();
+                if (!hasDistinctProjectNames)
+                    throw new InvalidDataException($"Project names in a profile have to be unique");
             }
         }
 
@@ -101,38 +119,63 @@ namespace microstack.configuration
             }
         }
 
-        private void OnChange(object sender, FileSystemEventArgs e)
+        private void WatchForChange(object state)
         {
-            Dictionary<string, IList<Configuration>> configurations;
+            lock (_lockObj) {
+                try {
+                    var onChange = File.GetLastWriteTime(_configFile).ToFileTimeUtc();
+                    // var hashOnChange = ComputeHash(_configFile);
+                    if (onChange == _lastWrite)
+                        return;
 
-            using var md5 = MD5.Create();
-            using var stream = File.OpenRead(_configFile);
+                    _lastWrite = onChange;
+                    Console.WriteLine("Trigerred");
 
-            // Since FSW fires two events simultaneously, this is a hack to fend away the second event fired, cause the data changes in the first event
-            var onHashChange = md5.ComputeHash(stream);
-            if (Encoding.UTF8.GetString(onHashChange) == Encoding.UTF8.GetString(_lastComputedHash))
-                return;
-            _lastComputedHash = onHashChange;
+                    using var stream = File.OpenRead(_configFile);
+                    using var streamReader = new StreamReader(stream);
+                    using (var jsonReader = new JsonTextReader(streamReader))
+                    {
+                        var serializer = new JsonSerializer();
+                        _configurations = serializer.Deserialize<Dictionary<string, IList<Configuration>>>(jsonReader);
+                        
+                        try {
+                            ValidateProfileAndConfigurations();
+                        } catch(Exception ex)
+                        {
+                            _console.ForegroundColor = ConsoleColor.DarkRed;
+                            _console.Out.WriteLine($"Invalid configuration found. {ex.Message}");
+                            _console.ResetColor();
+                            return;
+                        }
+                    }
+                } catch(Exception)
+                { 
+                    return; 
+                }
+                finally
+                {
 
-            // Reset stream to read from 0
-            stream.Seek(0, SeekOrigin.Begin);
-            using var streamReader = new StreamReader(stream);
-            using (var jsonReader = new JsonTextReader(streamReader))
-            {
-                var serializer = new JsonSerializer();
-                configurations = serializer.Deserialize<Dictionary<string, IList<Configuration>>>(jsonReader);
+                }
+
+                EventHandler<ConfigurationEventArgs> handler = OnConfigurationChange;
+                ConfigurationEventArgs configChangeArgs;
+
+                if (!string.IsNullOrWhiteSpace(_profile))
+                    configChangeArgs = new ConfigurationEventArgs(){ UpdatedConfiguration = _configurations[_profile] };
+                else
+                    configChangeArgs = new ConfigurationEventArgs() { UpdatedConfiguration = _configurations.FirstOrDefault().Value };
+                
+                if (handler != null)
+                    handler(null, configChangeArgs);
             }
-
-            EventHandler<ConfigurationEventArgs> handler = OnConfigurationChange;
-            ConfigurationEventArgs configChangeArgs;
-
-            if (!string.IsNullOrWhiteSpace(_profile))
-                configChangeArgs = new ConfigurationEventArgs(){ UpdatedConfiguration = configurations[_profile] };
-            else
-                configChangeArgs = new ConfigurationEventArgs() { UpdatedConfiguration = configurations.FirstOrDefault().Value };
-            
-            if (handler != null)
-                handler(null, configChangeArgs);
         }
+
+        // private byte[] ComputeHash(string path)
+        // {
+        //     using var md5 = MD5.Create();
+        //     var stream = File.OpenRead(path);
+        //     var hash = md5.ComputeHash(stream);
+        //     return hash;
+        // }
     }
 }

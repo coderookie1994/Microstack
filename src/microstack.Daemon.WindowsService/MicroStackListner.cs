@@ -30,7 +30,12 @@ namespace microstack.Daemon.WindowsService
                 using (var pipe = new NamedPipeServerStream("microstack_pipe", PipeDirection.InOut, 5))
                 {
                     var managedThread = Thread.CurrentThread.ManagedThreadId;
-                    await pipe.WaitForConnectionAsync(stoppingToken);
+                    try {
+                        await pipe.WaitForConnectionAsync(stoppingToken);
+                    } catch(Exception ex)
+                    {
+                        
+                    }
                     Console.WriteLine("Connected");
                     var processContract = Serializer.Deserialize<ProcessContract>(pipe);
                     _processStateManager.AddProcess(processContract.ProcessId, processContract.MicroStackPID);
