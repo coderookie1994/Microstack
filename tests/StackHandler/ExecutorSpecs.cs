@@ -28,7 +28,7 @@ namespace microstack.tests
             var executor = new HandlerExecutor(stackHandlers);
 
             // When
-            Func<Task> action = async () => await executor.Execute(null, false);
+            Func<Task> action = async () => await executor.Execute(false);
 
             // Then
             await action.Should().ThrowAsync<InvalidOperationException>()
@@ -52,10 +52,10 @@ namespace microstack.tests
             var executor = provider.GetRequiredService<HandlerExecutor>();
 
             // When
-            await executor.Execute(null, false);
+            await executor.Execute(false);
 
             // Then
-            gitHandler.Verify(h => h.Handle(It.IsAny<IList<microstack.configuration.Models.Configuration>>(), It.IsAny<bool>()), Times.Once);
+            gitHandler.Verify(h => h.Handle(It.IsAny<bool>()), Times.Once);
         }
     }
 }
