@@ -29,7 +29,7 @@ namespace microstack
                     });
                     services.AddTransient<HandlerExecutor>();
                     services.AddSingleton<ConfigurationProvider>();
-                    services.AddTransient<ICredentialProvider, GitCredentialProvider>();
+                    services.AddSingleton<ICredentialProvider, GitCredentialProvider>();
                     services.AddTransient<IGitOps, GitOps>();
                     services.AddSingleton<ProcessQueueTask>();
                     services.AddHostedService(sp => sp.GetRequiredService<ProcessQueueTask>());

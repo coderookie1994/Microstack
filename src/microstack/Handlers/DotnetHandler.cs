@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using AnyDiff.Extensions;
 using McMaster.Extensions.CommandLineUtils;
 using microstack.Abstractions;
 using microstack.BackgroundTasks;
@@ -73,7 +71,7 @@ namespace microstack.Handlers
         private void BuildProcessObjects()
         {
             _processInfoObjects = _configurations
-                // .Where(c => c.ProcessType.Equals(ProcessTypes.Dotnet))
+                // .Where(c => c.UseTempFs.Equals(false))
                 .Select(p => {
                     var processStartInfo = new ProcessStartInfo();
                     processStartInfo.UseShellExecute = false;
@@ -83,11 +81,34 @@ namespace microstack.Handlers
                     }
                     processStartInfo.FileName = DotNetExe.FullPathOrDefault();
                     processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://localhost:{p.Port}\"";
-                    processStartInfo.WorkingDirectory = Path.Combine(p.StartupProjectPath);
+                    processStartInfo.WorkingDirectory = Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath);
                     processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
                     return (p.ProjectName, processStartInfo);
             }).ToList();
+
+            // var tempFsObjects = _configurations.Where(c => c.UseTempFs.Equals(true))
+            //     .Select(p => {
+            //         var processStartInfo = new ProcessStartInfo();
+            //         processStartInfo.UseShellExecute = false;
+            //         foreach(var confOverride in p.ConfigOverrides)
+            //         {
+            //             processStartInfo.Environment.Add(confOverride);
+            //         }
+            //         processStartInfo.FileName = DotNetExe.FullPathOrDefault();
+            //         processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://localhost:{p.Port}\"";
+            //         processStartInfo.WorkingDirectory = Path.Combine(
+            //             Environment.ExpandEnvironmentVariables("@%userprofile%/AppData/Local/Temp"),
+            //             p.GitUrl.Split('/').LastOrDefault());
+            //         var ps = Process.Start(processStartInfo);
+            //         processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
+
+            //         return (p.ProjectName, processStartInfo);
+            //     });
+            
+            // if (tempFsObjects.Count() > 0)
+            //     foreach (var p in tempFsObjects)
+            //         _processInfoObjects.Add(p);
         }
 
         private bool SetVerbosity(bool verboseConsole, bool verboseProcess)

@@ -7,6 +7,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
 using microstack.configuration;
 using microstack.configuration.Models;
+using microstack.git.Abstractions;
 using microstack.Processor;
 using Newtonsoft.Json;
 
@@ -51,19 +52,24 @@ namespace microstack.Commands.SubCommands
             ShowInHelpText = true
         )]
         public string Profile { get; set; }
+        private string Username { get; set; }
+        private string Password { get; set; }
         
         private Dictionary<string, List<Configuration>> _configurations;
         private ConfigurationProvider _configProvider;
+        private ICredentialProvider _credentialProvider;
 
         public Run(StackProcessor spc, 
             IHostApplicationLifetime lifetime,
             IConsole console,
-            ConfigurationProvider configProvider)
+            ConfigurationProvider configProvider,
+            ICredentialProvider credProvider)
         {
             _spc = spc;
             _lifetime = lifetime;
             _console = console;
             _configProvider = configProvider;
+            _credentialProvider = credProvider;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
@@ -74,6 +80,7 @@ namespace microstack.Commands.SubCommands
             try {
                 _configProvider.SetContext(ConfigFile, Profile);
                 var validationResult = _configProvider.Validate();
+
                 if (validationResult.ReturnCode == 1)
                 {
                     OutputError(validationResult.Message);
@@ -86,6 +93,15 @@ namespace microstack.Commands.SubCommands
             }
 
             _configProvider.SetConfigurationContext();
+
+            if (_configProvider.Configurations.Any(c => c.UseTempFs == true))
+            {
+                _console.Out.WriteLine("TempFS is set to true, enter git credentials");
+                Username = Prompt.GetString("Enter git Username");
+                Password = Prompt.GetPassword("Enter git token");
+                _credentialProvider.SetCredentials(Username, Password);
+            }
+
             // Start stack
             try {
                 await _spc.InitStack();

@@ -65,11 +65,11 @@ namespace microstack.Commands.SubCommands
                                 },
                             },
                             GitProjectRootPath = "<<PATH TO GIT ROOT>>",
-                            GitRemoteName = "<<REMOTE_NAME>>",
+                            GitBranchName = "<<REMOTE_NAME>>",
                             GitUrl = "<<GIT_URL>>",
                             PullLatest = false,
-                            InMemoryGitFS = false,
-                            StartupProjectPath = "<<PATH TO STARTUP PROJECT>>",
+                            UseTempFs = false,
+                            StartupProjectRelativePath = "<<PATH TO STARTUP PROJECT>>",
                         }
                     }
                 }

@@ -17,8 +17,6 @@ namespace microstack.configuration
         private string _configFile;
         private string _profile;
         private IList<Configuration> _selectedConfigurations;
-        private FileSystemWatcher _fileSystemWatcher;
-        private byte[] _lastComputedHash = new byte[]{};
         private Timer _watcherThread;
         private object _lockObj = new object();
         private IConsole _console;
@@ -63,13 +61,17 @@ namespace microstack.configuration
             return (0, string.Empty);
         }
 
+        public void UpdateContext(string projectName, string newGitRoot)
+        {
+            _selectedConfigurations.FirstOrDefault(c => c.ProjectName.Equals(projectName)).GitProjectRootPath = newGitRoot;
+        }
+
         public void SetConfigurationContext()
         {
             if (!string.IsNullOrWhiteSpace(_profile))
                 _selectedConfigurations = _configurations[_profile];
             else if (_configurations.Count == 1)
                 _selectedConfigurations = _configurations.FirstOrDefault().Value;
-            Console.WriteLine("Setting up watcher");
             
             // _fileSystemWatcher = new FileSystemWatcher();
             // _fileSystemWatcher.Path = Path.Combine(Directory.GetCurrentDirectory());
@@ -97,10 +99,11 @@ namespace microstack.configuration
         {
             foreach(var profile in _configurations)
             {
-                var validationResult = profile.Value.Select(c => c.Validate());
+                var profileValidationResult = profile.Value.Select(c => c.Validate());
+                var gitValidationResult = profile.Value.Select(c => c.ValidateGitConfig());
                 var hasDistinctProjectNames = profile.Value.Select(c => c.ProjectName).Distinct().Count() == profile.Value.Count();
 
-                if (validationResult.Any(v => v.IsValid == false))
+                if (profileValidationResult.Any(v => v.IsValid == false) && gitValidationResult.Any(v => v.IsValid == false))
                     throw new InvalidDataException();
                 if (!hasDistinctProjectNames)
                     throw new InvalidDataException($"Project names in a profile have to be unique");
@@ -150,7 +153,7 @@ namespace microstack.configuration
                     }
                 } catch(Exception)
                 { 
-                    return; 
+                    return;
                 }
                 finally
                 {
@@ -161,9 +164,15 @@ namespace microstack.configuration
                 ConfigurationEventArgs configChangeArgs;
 
                 if (!string.IsNullOrWhiteSpace(_profile))
+                {
                     configChangeArgs = new ConfigurationEventArgs(){ UpdatedConfiguration = _configurations[_profile] };
+                    _selectedConfigurations = _configurations[_profile];
+                }
                 else
+                {
                     configChangeArgs = new ConfigurationEventArgs() { UpdatedConfiguration = _configurations.FirstOrDefault().Value };
+                    _selectedConfigurations = _configurations.FirstOrDefault().Value;
+                }
                 
                 if (handler != null)
                     handler(null, configChangeArgs);

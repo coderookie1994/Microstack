@@ -1,7 +1,7 @@
 {
   "defaultProfile": [
     {
-      "StartupProjectPath": "C:\\github.com\\testapp",
+      "StartupProjectRelativePath": ".",
       "ProjectName": "testapp",
       "NextProjectName": "",
       "GitProjectRootPath": "C:\\github.com\\testapp",
@@ -15,12 +15,12 @@
   ],
   "profile2": [
     {
-      "StartupProjectPath": "C:\\github.com\\testapp",
+      "StartupProjectRelativePath": ".",
       "ProjectName": "testapp",
       "NextProjectName": "x",
       "GitProjectRootPath": "C:\\github.com\\testapp",
       "PullLatest": false,
-      "Port": 5002,
+      "Port": 5004,
       "Verbose": false,
       "ConfigOverrides": {
         "Test": "FromOverridenKey",
@@ -28,12 +28,15 @@
       }
     },
     {
-      "StartupProjectPath": "C:\\github.com\\testapp2",
+      "StartupProjectRelativePath": ".",
       "ProjectName": "testapp2",
       "NextProjectName": "",
+      "GitUrl": "https://github.com/coderookie1994/confy.git",
+      "GitBranchName": "master",
+      "UseTempFs": false,
       "GitProjectRootPath": "C:\\github.com\\testapp2",
       "PullLatest": false,
-      "Port": 5003,
+      "Port": 5005,
       "Verbose": false,
       "ConfigOverrides": {
         "Test": "FromOverridenKey2",
