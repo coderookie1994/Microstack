@@ -10,6 +10,7 @@ namespace microstack.Commands
         Description = "Seamlessly run your apps without opening Visual Studio")]
     [Subcommand(typeof(Run))]
     [Subcommand(typeof(New))]
+    [Subcommand(typeof(TempFs))]
     public class MicroStack : BaseCommand
     {
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
