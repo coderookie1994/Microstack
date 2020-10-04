@@ -15,7 +15,8 @@ namespace microstack.Commands.SubCommands
         [Option(
             CommandOptionType.NoValue,
             ShortName = "s",
-            LongName = "show"
+            LongName = "show",
+            Description = "Show available workspaces in the temporary directory"
         )]
         public bool Show { get; set; }
 
@@ -43,9 +44,9 @@ namespace microstack.Commands.SubCommands
             _console.ForegroundColor = ConsoleColor.DarkYellow;
             _console.Out.WriteLine("Found temporary workspaces");
             _console.ForegroundColor = ConsoleColor.DarkGreen;
-            foreach(var dir in Directory.EnumerateDirectories(microStackDir))
+            foreach(var dir in Directory.GetDirectories(microStackDir))
             {
-                _console.Out.WriteLine($"\t {dir}");
+                _console.Out.WriteLine($"\t {Path.GetFileName(dir)}");
             }
             _console.ResetColor();
             return 0;
