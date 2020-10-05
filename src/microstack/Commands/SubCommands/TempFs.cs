@@ -20,6 +20,16 @@ namespace microstack.Commands.SubCommands
         )]
         public bool Show { get; set; }
 
+        [Option(
+            CommandOptionType.SingleValue,
+            ShortName = "d",
+            LongName = "delete",
+            Description = "Delete the temporary workspace",
+            ValueName = "WorkspaceName",
+            ShowInHelpText = true
+        )]
+        public string Delete { get; set; }
+
         public TempFs(IConsole console)
         {
             _console = console;
@@ -27,6 +37,12 @@ namespace microstack.Commands.SubCommands
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
         {
+            if(!string.IsNullOrWhiteSpace(Delete))
+            {
+                DeleteWorkspace();
+                return 0;
+            }
+
             if (!Show)
             {
                 app.ShowHelp();
@@ -50,6 +66,43 @@ namespace microstack.Commands.SubCommands
             }
             _console.ResetColor();
             return 0;
+        }
+
+        private void DeleteWorkspace()
+        {
+            var microStackDir = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%/AppData/Local/Temp/MicroStack"));
+            if (Directory.Exists(microStackDir))
+            {
+                var specifiedDir = Path.Combine(microStackDir, Delete);
+                if (Directory.Exists(specifiedDir))
+                {
+                    try {
+                        Directory.Delete(specifiedDir, true);
+                    } catch(IOException ex)
+                    {
+                        _console.ForegroundColor = ConsoleColor.DarkRed;
+                        _console.Out.WriteLine("IOException encountered", ex);
+                    }
+                    catch(UnauthorizedAccessException ex)
+                    {
+                        _console.ForegroundColor = ConsoleColor.DarkRed;
+                        _console.Out.WriteLine($"Access Denied, try opening prompt with elevated previlidges {ex.Message}");
+                    }
+                    finally
+                    {
+                        _console.ResetColor();
+                    }
+                }
+                else
+                {
+                    _console.ForegroundColor = ConsoleColor.DarkRed;
+                    _console.Out.WriteLine($"Specified workspace {Delete} not found");
+                    _console.ResetColor();
+                }
+                return;
+            }
+            _console.ForegroundColor = ConsoleColor.DarkRed;
+            _console.Out.WriteLine("No temporary workspaces found");
         }
     }
 }

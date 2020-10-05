@@ -50,10 +50,5 @@ namespace microstack.Handlers
 
             await base.Handle(isVerbose);
         }
-
-        private void Validate(IList<Configuration> configurations)
-        {
-
-        }
     }
 }
