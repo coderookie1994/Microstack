@@ -56,6 +56,10 @@ namespace microstack.git
                         CredentialsProvider = (url, fromUrl, types) => Credentials()
                     }, $"Fetching from {branchName}");
 
+                    repo.Reset(ResetMode.Hard);
+                    
+                    Commands.Checkout(repo, branchName);
+
                     Commands.Pull(repo,
                         repo.Config.BuildSignature(DateTime.Now),
                         new PullOptions()
@@ -66,7 +70,12 @@ namespace microstack.git
                             }
                         }
                     );
-                }catch(Exception ex)
+                }
+                catch(LibGit2Sharp.NotFoundException ex)
+                {
+                    throw new LibGit2Sharp.NotFoundException("Incorrect branch/url specified, not found");
+                }
+                catch(Exception ex)
                 {
                     throw new InvalidOperationException("Incorrect git configuration", ex);
                 }
@@ -79,7 +88,10 @@ namespace microstack.git
         {
             var dirPath = Environment.ExpandEnvironmentVariables(@"%userprofile%\AppData\Local\Temp\MicroStack");
 
-            return Repository.Clone(
+            var gitRoot = string.Empty;
+
+            try{
+                gitRoot = Repository.Clone(
                     remote, 
                     Path.Combine(dirPath, projectName), 
                     new CloneOptions() 
@@ -87,7 +99,20 @@ namespace microstack.git
                         BranchName = branch ?? "master", 
                         CredentialsProvider = (url, fromUrl, types) => Credentials()
                     }
-            );
+                );
+                if (gitRoot.EndsWith(@".git\"))
+                    gitRoot = gitRoot.Replace(@".git\", string.Empty);
+            }
+            catch(LibGit2Sharp.NotFoundException ex)
+            {
+                throw new LibGit2Sharp.NotFoundException("Incorrect branch/url specified, not found");
+            }
+            catch(Exception ex)
+            {
+                throw new InvalidOperationException("Incorrect git configuration", ex);
+            }
+            
+            return gitRoot;
         }
 
         private UsernamePasswordCredentials Credentials() => 
