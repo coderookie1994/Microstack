@@ -16,7 +16,6 @@ namespace microstack
         public void ConfigureCommands()
         {
             _app.HelpOption(true);
-
         }
     }
 }

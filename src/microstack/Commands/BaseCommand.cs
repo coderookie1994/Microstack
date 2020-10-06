@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
+using microstack.Helpers;
 
 namespace microstack.Commands
 {
     [HelpOption("--help")]
     public abstract class BaseCommand
     {
-        protected IConsole _console;
+        protected ConsoleHelper _consoleHelper;
         protected virtual Task<int> OnExecute(CommandLineApplication app)
         {
             return Task.FromResult(0);
@@ -20,16 +21,12 @@ namespace microstack.Commands
 
         protected void OuputToConsole(string data)
         {
-            _console.ForegroundColor = System.ConsoleColor.White;
-            _console.Out.Write(data);
-            _console.ResetColor();
+            _consoleHelper.Print(data, ConsoleColor.White);
         }
 
         protected void OutputError(string message)
         {
-            _console.ForegroundColor = System.ConsoleColor.Red;
-            _console.Error.Write(message);
-            _console.ResetColor();
+            _consoleHelper.Print(message, ConsoleColor.Red);
         }
     }
 }

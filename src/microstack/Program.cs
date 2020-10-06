@@ -10,6 +10,7 @@ using microstack.Extensions;
 using microstack.git;
 using microstack.git.Abstractions;
 using microstack.Handlers;
+using microstack.Helpers;
 using microstack.Processor;
 
 namespace microstack
@@ -33,6 +34,7 @@ namespace microstack
                     services.AddTransient<IGitOps, GitOps>();
                     services.AddSingleton<ProcessQueueTask>();
                     services.AddHostedService(sp => sp.GetRequiredService<ProcessQueueTask>());
+                    services.AddTransient<ConsoleHelper>();
                 })
                 .RunCommandLineApplicationAsync<MicroStack>(args, cts.Token)
                 .GetAwaiter()

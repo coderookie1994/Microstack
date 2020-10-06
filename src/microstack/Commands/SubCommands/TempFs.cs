@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
+using microstack.Helpers;
 
 namespace microstack.Commands.SubCommands
 {
@@ -30,9 +31,9 @@ namespace microstack.Commands.SubCommands
         )]
         public string Delete { get; set; }
 
-        public TempFs(IConsole console)
+        public TempFs(ConsoleHelper consoleHelper)
         {
-            _console = console;
+            _consoleHelper = consoleHelper;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
@@ -53,18 +54,15 @@ namespace microstack.Commands.SubCommands
             var microStackExists = Directory.Exists(microStackDir);
             if (!microStackExists)
             {
-                _console.Out.WriteLine("No temporary workspaces found");
+                _consoleHelper.Print("No temporary workspaces found");
                 return 0;
             }
             
-            _console.ForegroundColor = ConsoleColor.DarkYellow;
-            _console.Out.WriteLine("Found temporary workspaces");
-            _console.ForegroundColor = ConsoleColor.DarkGreen;
+            _consoleHelper.Print("Found temporary workspaces", ConsoleColor.DarkYellow);
             foreach(var dir in Directory.GetDirectories(microStackDir))
             {
-                _console.Out.WriteLine($"\t {Path.GetFileName(dir)}");
+                _consoleHelper.Print($"\t {Path.GetFileName(dir)}", ConsoleColor.DarkGreen);
             }
-            _console.ResetColor();
             return 0;
         }
 
@@ -78,31 +76,23 @@ namespace microstack.Commands.SubCommands
                 {
                     try {
                         Directory.Delete(specifiedDir, true);
-                    } catch(IOException ex)
+                    } 
+                    catch(IOException ex)
                     {
-                        _console.ForegroundColor = ConsoleColor.DarkRed;
-                        _console.Out.WriteLine("IOException encountered", ex);
+                        _consoleHelper.Print("IOException encountered", ConsoleColor.DarkRed);
                     }
                     catch(UnauthorizedAccessException ex)
                     {
-                        _console.ForegroundColor = ConsoleColor.DarkRed;
-                        _console.Out.WriteLine($"Access Denied, try opening prompt with elevated previlidges {ex.Message}");
-                    }
-                    finally
-                    {
-                        _console.ResetColor();
+                        _consoleHelper.Print($"Access Denied, try opening prompt with elevated previlidges {ex.Message}", ConsoleColor.DarkRed);
                     }
                 }
                 else
                 {
-                    _console.ForegroundColor = ConsoleColor.DarkRed;
-                    _console.Out.WriteLine($"Specified workspace {Delete} not found");
-                    _console.ResetColor();
+                    _consoleHelper.Print($"Specified workspace {Delete} not found", ConsoleColor.DarkRed);
                 }
                 return;
             }
-            _console.ForegroundColor = ConsoleColor.DarkRed;
-            _console.Out.WriteLine("No temporary workspaces found");
+            _consoleHelper.Print("No temporary workspaces found", ConsoleColor.DarkRed);
         }
     }
 }

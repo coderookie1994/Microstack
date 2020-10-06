@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using microstack.configuration.Models;
+using microstack.Helpers;
 using microstack.Models;
 using Newtonsoft.Json;
 
@@ -17,6 +18,8 @@ namespace microstack.Commands.SubCommands
     )]
     public class New : BaseCommand
     {
+        private ConsoleHelper _consoleHelper;
+
         [Option(
             CommandOptionType.NoValue,
             Description = "Create a new .mstkc.json file",
@@ -26,9 +29,9 @@ namespace microstack.Commands.SubCommands
         )]
         public bool GenerateMstkcConfig { get; set; }
 
-        public New(IConsole console)
+        public New(ConsoleHelper consoleHelper)
         {
-            _console = console;
+            _consoleHelper = consoleHelper;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
@@ -78,7 +81,7 @@ namespace microstack.Commands.SubCommands
                 System.IO.File.WriteAllText(".mstkc_template.json", JsonConvert.SerializeObject(configuration, Formatting.Indented));
             } catch(Exception ex)
             {
-                _console.Out.WriteAsync($"Failed to create .mstkc.json {ex.Message}");
+                _consoleHelper.Print($"Failed to create .mstkc.json {ex.Message}");
             }
             
         }

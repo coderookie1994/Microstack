@@ -86,29 +86,6 @@ namespace microstack.Handlers
 
                     return (p.ProjectName, processStartInfo);
             }).ToList();
-
-            // var tempFsObjects = _configurations.Where(c => c.UseTempFs.Equals(true))
-            //     .Select(p => {
-            //         var processStartInfo = new ProcessStartInfo();
-            //         processStartInfo.UseShellExecute = false;
-            //         foreach(var confOverride in p.ConfigOverrides)
-            //         {
-            //             processStartInfo.Environment.Add(confOverride);
-            //         }
-            //         processStartInfo.FileName = DotNetExe.FullPathOrDefault();
-            //         processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://localhost:{p.Port}\"";
-            //         processStartInfo.WorkingDirectory = Path.Combine(
-            //             Environment.ExpandEnvironmentVariables("@%userprofile%/AppData/Local/Temp"),
-            //             p.GitUrl.Split('/').LastOrDefault());
-            //         var ps = Process.Start(processStartInfo);
-            //         processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
-
-            //         return (p.ProjectName, processStartInfo);
-            //     });
-            
-            // if (tempFsObjects.Count() > 0)
-            //     foreach (var p in tempFsObjects)
-            //         _processInfoObjects.Add(p);
         }
 
         private bool SetVerbosity(bool verboseConsole, bool verboseProcess)

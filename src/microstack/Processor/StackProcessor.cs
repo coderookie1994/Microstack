@@ -9,23 +9,24 @@ using Microsoft.Extensions.Logging;
 using microstack.configuration;
 using microstack.configuration.Models;
 using microstack.Handlers;
+using microstack.Helpers;
 using microstack.Models;
 
 namespace microstack.Processor
 {
     public class StackProcessor
     {
-        private IConsole _console;
+        private ConsoleHelper _consoleHelper;
         private HandlerExecutor _executor;
         private ConfigurationProvider _configProvider;
 
         public bool IsInitialized { get; private set; }
         private bool _isVerbose { get; set; }
-        public StackProcessor(IConsole console, 
+        public StackProcessor(ConsoleHelper consoleHelper, 
             HandlerExecutor executor,
             ConfigurationProvider configProvider)
         {
-            _console = console;
+            _consoleHelper = consoleHelper;
             _executor = executor;
             _configProvider = configProvider;
         }
@@ -33,7 +34,7 @@ namespace microstack.Processor
         public async Task InitStack()
         {
             await _executor.Execute(_isVerbose);
-            await _console.Out.WriteLineAsync("Press CTRL+C to exit... \r\n");
+            _consoleHelper.Print("Press CTRL+C to exit... \r\n");
         }
     }
 }

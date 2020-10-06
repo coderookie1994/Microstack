@@ -132,7 +132,6 @@ namespace microstack.configuration
                         return;
 
                     _lastWrite = onChange;
-                    Console.WriteLine("Trigerred");
 
                     using var stream = File.OpenRead(_configFile);
                     using var streamReader = new StreamReader(stream);
@@ -154,10 +153,6 @@ namespace microstack.configuration
                 } catch(Exception)
                 { 
                     return;
-                }
-                finally
-                {
-
                 }
 
                 EventHandler<ConfigurationEventArgs> handler = OnConfigurationChange;
