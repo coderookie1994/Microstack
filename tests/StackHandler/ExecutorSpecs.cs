@@ -39,7 +39,10 @@ namespace microstack.tests
         public async Task Execute_WhenHandlersAreRegistered_ShouldExecute()
         {
             // Given
-            var gitHandler = new Mock<GitHandler>(new Mock<Microstack.Configuration.ConfigurationProvider>().Object, new Mock<IGitOps>().Object);
+            var gitHandler = new Mock<GitHandler>(new Mock<IGitOps>().Object, 
+                new Mock<Microstack.CLI.BackgroundTasks.ProcessSpawnManager>().Object, 
+                new Mock<Microstack.Configuration.ConfigurationProvider>().Object
+            );
             var processHandler = new Mock<DotnetHandler>(new Mock<IConsole>().Object);
             var serviceCollection = new ServiceCollection();
             serviceCollection.RegisterHandlers(sh => {
