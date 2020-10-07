@@ -2,17 +2,17 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using microstack.Processor;
+using Microstack.CLI.Processor;
 using Xunit;
 using Moq;
-using microstack.Handlers;
-using microstack.Extensions;
-using microstack.Abstractions;
+using Microstack.CLI.Handlers;
+using Microstack.CLI.Extensions;
+using Microstack.CLI.Abstractions;
 using System.Collections;
 using McMaster.Extensions.CommandLineUtils;
 using System.Collections.Generic;
-using microstack.configuration;
-using microstack.git;
+using Microstack.Configuration.Models;
+using Microstack.Git.Abstractions;
 
 namespace microstack.tests
 {
@@ -39,7 +39,7 @@ namespace microstack.tests
         public async Task Execute_WhenHandlersAreRegistered_ShouldExecute()
         {
             // Given
-            var gitHandler = new Mock<GitHandler>(new Mock<ConfigurationProvider>().Object, new Mock<IGitOps>().Object);
+            var gitHandler = new Mock<GitHandler>(new Mock<Microstack.Configuration.ConfigurationProvider>().Object, new Mock<IGitOps>().Object);
             var processHandler = new Mock<DotnetHandler>(new Mock<IConsole>().Object);
             var serviceCollection = new ServiceCollection();
             serviceCollection.RegisterHandlers(sh => {

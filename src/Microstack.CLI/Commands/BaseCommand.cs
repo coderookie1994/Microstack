@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using microstack.Helpers;
+using Microstack.CLI.Helpers;
 
-namespace microstack.Commands
+namespace Microstack.CLI.Commands
 {
     [HelpOption("--help")]
     public abstract class BaseCommand

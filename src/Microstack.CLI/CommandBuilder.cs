@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using McMaster.Extensions.CommandLineUtils;
 
-namespace microstack
+namespace Microstack.CLI
 {
     public class CommandBuilder
     {

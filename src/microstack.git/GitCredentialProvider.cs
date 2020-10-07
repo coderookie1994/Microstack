@@ -1,6 +1,6 @@
-using microstack.git.Abstractions;
+using Microstack.Git.Abstractions;
 
-namespace microstack.git
+namespace Microstack.Git
 {
     public class GitCredentialProvider : ICredentialProvider
     {

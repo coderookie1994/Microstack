@@ -1,4 +1,4 @@
-namespace microstack.git.Abstractions
+namespace Microstack.Git.Abstractions
 {
     public interface ICredentialProvider
     {

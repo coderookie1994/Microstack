@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace microstack.configuration.Models
+namespace Microstack.Configuration.Models
 {
     public class ConfigurationEventArgs : EventArgs
     {

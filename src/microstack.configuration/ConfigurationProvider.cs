@@ -5,18 +5,18 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using microstack.configuration.Models;
+using Microstack.Configuration.Models;
 using Newtonsoft.Json;
 using McMaster.Extensions.CommandLineUtils;
 
-namespace microstack.configuration
+namespace Microstack.Configuration
 {
     public class ConfigurationProvider
     {
-        private Dictionary<string, IList<Configuration>> _configurations;
+        private Dictionary<string, IList<Microstack.Configuration.Models.Configuration>> _configurations;
         private string _configFile;
         private string _profile;
-        private IList<Configuration> _selectedConfigurations;
+        private IList<Microstack.Configuration.Models.Configuration> _selectedConfigurations;
         private Timer _watcherThread;
         private object _lockObj = new object();
         private IConsole _console;
@@ -24,7 +24,7 @@ namespace microstack.configuration
 
         public bool IsValid { get; private set; }
         public bool IsContextSet { get; private set; }
-        public IList<Configuration> Configurations => _selectedConfigurations;
+        public IList<Microstack.Configuration.Models.Configuration> Configurations => _selectedConfigurations;
         public event EventHandler<ConfigurationEventArgs> OnConfigurationChange;
 
         public ConfigurationProvider(IConsole console)
@@ -85,7 +85,7 @@ namespace microstack.configuration
         private void ExtractConfigFromPath(string path)
         {       
             try {
-                _configurations = JsonConvert.DeserializeObject<Dictionary<string, IList<Configuration>>>(File.ReadAllText(Path.Combine(path)));
+                _configurations = JsonConvert.DeserializeObject<Dictionary<string, IList<Microstack.Configuration.Models.Configuration>>>(File.ReadAllText(Path.Combine(path)));
                 // _lastComputedHash = ComputeHash(path);
                 ValidateProfileAndConfigurations();
                 _lastWrite = File.GetLastWriteTime(_configFile).ToFileTimeUtc();
@@ -138,7 +138,7 @@ namespace microstack.configuration
                     using (var jsonReader = new JsonTextReader(streamReader))
                     {
                         var serializer = new JsonSerializer();
-                        _configurations = serializer.Deserialize<Dictionary<string, IList<Configuration>>>(jsonReader);
+                        _configurations = serializer.Deserialize<Dictionary<string, IList<Microstack.Configuration.Models.Configuration>>>(jsonReader);
                         
                         try {
                             ValidateProfileAndConfigurations();

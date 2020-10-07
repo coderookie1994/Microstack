@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
-using microstack.configuration.Models;
-using microstack.Helpers;
-using microstack.Models;
+using Microstack.CLI.Models;
+using Microstack.CLI.Helpers;
 using Newtonsoft.Json;
 
-namespace microstack.Commands.SubCommands
+namespace Microstack.CLI.Commands.SubCommands
 {
     [Command(
         Name = "new",
@@ -54,11 +53,11 @@ namespace microstack.Commands.SubCommands
                 return;
             
             // TEMPLATE CODE FOR OUTPUT
-            var configuration = new Dictionary<string, List<Configuration>>()
+            var configuration = new Dictionary<string, List<Microstack.Configuration.Models.Configuration>>()
             {
                 {
-                    "sample_profile", new List<Configuration>(){
-                        new Configuration(){
+                    "sample_profile", new List<Microstack.Configuration.Models.Configuration>(){
+                        new Microstack.Configuration.Models.Configuration(){
                             ProjectName = "<<PROJECT NAME>>",
                             NextProjectName = "<<PROJECT NAME OF THE DEPENDENT PROJECT>>",
                             Port = 0,

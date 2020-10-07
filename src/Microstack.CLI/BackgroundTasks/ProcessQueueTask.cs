@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
-using microstack.BackgroundTasks.Models;
+using Microstack.CLI.BackgroundTasks.Models;
 
-namespace microstack.BackgroundTasks
+namespace Microstack.CLI.BackgroundTasks
 {
     public class ProcessQueueTask : IHostedService, IDisposable
     {

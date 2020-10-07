@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using microstack.Abstractions;
-using microstack.BackgroundTasks;
-using microstack.configuration;
-using microstack.configuration.Models;
-using microstack.git;
+using Microstack.CLI.Abstractions;
+using Microstack.CLI.BackgroundTasks;
+using ConfigurationProvider = Microstack.Configuration.ConfigurationProvider;
+using Microstack.CLI.Models;
+using Microstack.Git.Abstractions;
 
-namespace microstack.Handlers
+namespace Microstack.CLI.Handlers
 {
     public class GitHandler : StackHandler
     {

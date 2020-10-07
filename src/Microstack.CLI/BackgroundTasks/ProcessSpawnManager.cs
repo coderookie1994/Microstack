@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace microstack.BackgroundTasks
+namespace Microstack.CLI.BackgroundTasks
 {
     public class ProcessSpawnManager : IDisposable
     {

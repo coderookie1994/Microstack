@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace microstack.Models
+namespace Microstack.CLI.Models
 {
     public class StackConfiguration
     {

@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using microstack.Helpers;
+using Microstack.CLI.Helpers;
 
-namespace microstack.Commands.SubCommands
+namespace Microstack.CLI.Commands.SubCommands
 {
     [Command(
         Name = "tempfs",

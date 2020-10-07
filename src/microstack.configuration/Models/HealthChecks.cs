@@ -1,4 +1,4 @@
-namespace microstack.configuration.Models
+namespace Microstack.Configuration.Models
 {
     public enum HealthChecks
     {

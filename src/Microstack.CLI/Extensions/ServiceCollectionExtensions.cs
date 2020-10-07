@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using microstack.Abstractions;
-using microstack.BackgroundTasks;
-using microstack.Processor;
+using Microstack.CLI.Abstractions;
+using Microstack.CLI.BackgroundTasks;
+using Microstack.CLI.Processor;
 
-namespace microstack.Extensions
+namespace Microstack.CLI.Extensions
 {
     public static class ExecutorExtensions
     {

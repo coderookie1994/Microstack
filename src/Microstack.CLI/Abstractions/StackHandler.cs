@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using microstack.BackgroundTasks;
-using microstack.configuration;
-using microstack.configuration.Models;
+using Microstack.CLI.BackgroundTasks;
+using Microstack.Configuration;
 
-namespace microstack.Abstractions
+namespace Microstack.CLI.Abstractions
 {
     public abstract class StackHandler
     {

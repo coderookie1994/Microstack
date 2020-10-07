@@ -1,6 +1,6 @@
 using ProtoBuf;
 
-namespace microstack.BackgroundTasks.Models
+namespace Microstack.CLI.BackgroundTasks.Models
 {
     [ProtoContract]
     public class ProcessContract

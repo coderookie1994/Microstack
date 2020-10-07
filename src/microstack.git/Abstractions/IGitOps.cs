@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace microstack.git
+namespace Microstack.Git.Abstractions
 {
     public interface IGitOps
     {

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
-using microstack.configuration;
-using microstack.configuration.Models;
-using microstack.git.Abstractions;
-using microstack.Processor;
+using Microstack.CLI;
+using Microstack.CLI.Models;
+using Microstack.Git.Abstractions;
+using Microstack.CLI.Helpers;
+using Microstack.CLI.Processor;
 using Newtonsoft.Json;
 
-namespace microstack.Commands.SubCommands
+namespace Microstack.CLI.Commands.SubCommands
 {
     [Command(Name = "run",
         Description="Run the stack of apps specified in the Microstack configuration json",
@@ -55,21 +56,22 @@ namespace microstack.Commands.SubCommands
         private string Username { get; set; }
         private string Password { get; set; }
         
-        private Dictionary<string, List<Configuration>> _configurations;
-        private ConfigurationProvider _configProvider;
+        private Dictionary<string, List<Microstack.Configuration.Models.Configuration>> _configurations;
+        private Microstack.Configuration.ConfigurationProvider _configProvider;
         private ICredentialProvider _credentialProvider;
+        private ConsoleHelper _consoleHelper;
 
         public Run(StackProcessor spc, 
             IHostApplicationLifetime lifetime,
-            IConsole console,
-            ConfigurationProvider configProvider,
+            ConsoleHelper consoleHelper,
+            Microstack.Configuration.ConfigurationProvider configProvider,
             ICredentialProvider credProvider)
         {
             _spc = spc;
             _lifetime = lifetime;
-            _console = console;
             _configProvider = configProvider;
             _credentialProvider = credProvider;
+            _consoleHelper = consoleHelper;
         }
 
         protected async override Task<int> OnExecute(CommandLineApplication app)
@@ -96,7 +98,7 @@ namespace microstack.Commands.SubCommands
 
             if (_configProvider.Configurations.Any(c => c.UseTempFs == true))
             {
-                _console.Out.WriteLine("TempFS is set to true, enter git credentials");
+                _consoleHelper.Print("TempFS is set to true, enter git credentials");
                 Username = Prompt.GetString("Enter git Username");
                 Password = Prompt.GetPassword("Enter git token");
                 _credentialProvider.SetCredentials(Username, Password);
@@ -114,8 +116,7 @@ namespace microstack.Commands.SubCommands
             // Loop until CTRL+C is pressed
             while(!ct.IsCancellationRequested) { }
 
-            _console.ResetColor();
-            _console.Out.WriteLine("\r\nMicrostack stopping...\r\n");
+            _consoleHelper.Print("\r\nMicrostack stopping...\r\n");
             return 0;
         }
     }

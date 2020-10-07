@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
-using microstack.Commands.SubCommands;
+using Microstack.CLI.Commands.SubCommands;
 
-namespace microstack.Commands
+namespace Microstack.CLI.Commands
 {
     [Command("microstack", 
         UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect,

@@ -9,6 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\microstack.configuration\microstack.configuration.csproj" />
+    <ProjectReference Include="..\Microstack.Configuration\Microstack.Configuration.csproj" />
   </ItemGroup>
 </Project>

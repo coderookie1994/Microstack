@@ -2,18 +2,18 @@
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using microstack.Abstractions;
-using microstack.BackgroundTasks;
-using microstack.Commands;
-using microstack.configuration;
-using microstack.Extensions;
-using microstack.git;
-using microstack.git.Abstractions;
-using microstack.Handlers;
-using microstack.Helpers;
-using microstack.Processor;
+using Microstack.CLI.Abstractions;
+using Microstack.CLI.BackgroundTasks;
+using Microstack.CLI.Commands;
+using Microstack.CLI;
+using Microstack.CLI.Extensions;
+using Microstack.Git;
+using Microstack.Git.Abstractions;
+using Microstack.CLI.Handlers;
+using Microstack.CLI.Helpers;
+using Microstack.CLI.Processor;
 
-namespace microstack
+namespace Microstack.CLI
 {
     class Program
     {
@@ -29,7 +29,7 @@ namespace microstack
                         sh.AddHandler<DotnetHandler>();
                     });
                     services.AddTransient<HandlerExecutor>();
-                    services.AddSingleton<ConfigurationProvider>();
+                    services.AddSingleton<Microstack.Configuration.ConfigurationProvider>();
                     services.AddSingleton<ICredentialProvider, GitCredentialProvider>();
                     services.AddTransient<IGitOps, GitOps>();
                     services.AddSingleton<ProcessQueueTask>();

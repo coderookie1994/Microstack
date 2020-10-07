@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using microstack.Abstractions;
-using microstack.configuration.Models;
+using Microstack.CLI.Abstractions;
+using Microstack.CLI.Models;
 
-namespace microstack.Processor
+namespace Microstack.CLI.Processor
 {
     /// <summary>
     /// <para>HandlerExecutor executes all the registered handlers registered in <see cref="Program.cs" /></para>

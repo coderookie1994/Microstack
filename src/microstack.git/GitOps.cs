@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
-using microstack.configuration;
-using microstack.git.Abstractions;
+using Microstack.Configuration;
+using Microstack.Git.Abstractions;
 
-namespace microstack.git
+namespace Microstack.Git
 {
     public class GitOps : IGitOps
     {

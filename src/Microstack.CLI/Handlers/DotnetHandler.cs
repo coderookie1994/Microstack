@@ -5,16 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using microstack.Abstractions;
-using microstack.BackgroundTasks;
-using microstack.configuration;
-using microstack.configuration.Models;
+using Microstack.CLI.Abstractions;
+using Microstack.CLI.BackgroundTasks;
+using Microstack.CLI;
+using Microstack.Configuration.Models;
 
-namespace microstack.Handlers
+namespace Microstack.CLI.Handlers
 {
     public class DotnetHandler : StackHandler
     {
-        private IList<microstack.configuration.Models.Configuration> _configurations;
+        private IList<Microstack.Configuration.Models.Configuration> _configurations;
         private IList<(string ProjectName, ProcessStartInfo ProcessObject)> _processInfoObjects;
         private IList<Process> _processes = new List<Process>();
         private bool _isVerbose;
@@ -23,7 +23,7 @@ namespace microstack.Handlers
         protected new bool raiseEventOnHandleComplete = true;
         public DotnetHandler(IConsole console,
             ProcessSpawnManager processSpawnManager,
-            ConfigurationProvider configurationProvider) : base (processSpawnManager, configurationProvider)
+            Microstack.Configuration.ConfigurationProvider configurationProvider) : base (processSpawnManager, configurationProvider)
         {
             _console = console;
             configurationProvider.OnConfigurationChange += ConfigurationChanged;

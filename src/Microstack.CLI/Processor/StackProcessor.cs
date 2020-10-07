@@ -6,13 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
-using microstack.configuration;
-using microstack.configuration.Models;
-using microstack.Handlers;
-using microstack.Helpers;
-using microstack.Models;
-
-namespace microstack.Processor
+using Microstack.CLI;
+using Microstack.CLI.Models;
+using Microstack.CLI.Handlers;
+using Microstack.CLI.Helpers;
+using ConfigurationProvider = Microstack.Configuration.ConfigurationProvider;
+namespace Microstack.CLI.Processor
 {
     public class StackProcessor
     {

@@ -1,7 +1,7 @@
 using System;
 using McMaster.Extensions.CommandLineUtils;
 
-namespace microstack.Helpers
+namespace Microstack.CLI.Helpers
 {
     public class ConsoleHelper
     {
