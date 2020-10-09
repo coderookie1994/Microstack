@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microstack.CLI.Helpers;
@@ -51,7 +52,7 @@ namespace Microstack.CLI.Commands.SubCommands
             }
 
             var microStackDir = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%/AppData/Local/Temp/MicroStack"));
-            var microStackExists = Directory.Exists(microStackDir);
+            var microStackExists = Directory.Exists(microStackDir) && Directory.EnumerateDirectories(microStackDir).Count() > 0;
             if (!microStackExists)
             {
                 _consoleHelper.Print("No temporary workspaces found");
@@ -75,7 +76,8 @@ namespace Microstack.CLI.Commands.SubCommands
                 if (Directory.Exists(specifiedDir))
                 {
                     try {
-                        Directory.Delete(specifiedDir, true);
+                        // Directory.Delete(specifiedDir, true);
+                        RecursiveFileDelete(specifiedDir);
                     } 
                     catch(IOException ex)
                     {
@@ -93,6 +95,21 @@ namespace Microstack.CLI.Commands.SubCommands
                 return;
             }
             _consoleHelper.Print("No temporary workspaces found", ConsoleColor.DarkRed);
+        }
+
+        private void RecursiveFileDelete(string rootDir)
+        {
+            var dirInfo = new DirectoryInfo(rootDir);
+            foreach(var file in dirInfo.GetFiles())
+            {
+                file.Attributes = FileAttributes.Normal;
+                File.Delete(file.FullName);
+            }
+            foreach(var dir in Directory.GetDirectories(rootDir))
+            {
+                RecursiveFileDelete(dir);
+            }
+            Directory.Delete(rootDir);
         }
     }
 }
