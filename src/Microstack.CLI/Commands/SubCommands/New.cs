@@ -17,8 +17,6 @@ namespace Microstack.CLI.Commands.SubCommands
     )]
     public class New : BaseCommand
     {
-        private ConsoleHelper _consoleHelper;
-
         [Option(
             CommandOptionType.NoValue,
             Description = "Create a new .mstkc.json file",

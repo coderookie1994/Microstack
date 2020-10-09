@@ -59,8 +59,6 @@ namespace Microstack.CLI.Commands.SubCommands
         private Dictionary<string, List<Microstack.Configuration.Models.Configuration>> _configurations;
         private Microstack.Configuration.ConfigurationProvider _configProvider;
         private ICredentialProvider _credentialProvider;
-        private ConsoleHelper _consoleHelper;
-
         public Run(StackProcessor spc, 
             IHostApplicationLifetime lifetime,
             ConsoleHelper consoleHelper,
@@ -81,6 +79,11 @@ namespace Microstack.CLI.Commands.SubCommands
 
             try {
                 _configProvider.SetContext(ConfigFile, Profile);
+                if (!_configProvider.IsContextSet)
+                {
+                    app.ShowHelp();
+                    return 1;
+                }
                 var validationResult = _configProvider.Validate();
 
                 if (validationResult.ReturnCode == 1)

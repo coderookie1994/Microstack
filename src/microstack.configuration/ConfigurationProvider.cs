@@ -45,6 +45,10 @@ namespace Microstack.Configuration
             {
                 GetFromEnvironmentPath();
             }
+            
+            if (string.IsNullOrWhiteSpace(_configFile))
+                return;
+
             IsContextSet = true;
         }
 
