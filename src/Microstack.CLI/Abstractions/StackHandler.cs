@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microstack.CLI.BackgroundTasks;
 using Microstack.Configuration;
@@ -12,7 +13,8 @@ namespace Microstack.CLI.Abstractions
         protected StackHandler next;
         protected ProcessSpawnManager processSpawnManager;
         protected ConfigurationProvider configurationProvider;
-        protected bool raiseEventOnHandleComplete;
+        protected List<Process> buildProcs = new List<Process>();
+        private int _buildProcCounter;
 
         public StackHandler(ProcessSpawnManager processSpawnManager,
         ConfigurationProvider configProvider)
@@ -22,12 +24,31 @@ namespace Microstack.CLI.Abstractions
         }
         public virtual async Task Handle(bool isVerbose)
         {
-            OnHandleComplete();
+            while (_buildProcCounter > 0) { }
+            PostHandle();
             if (next != null)
+            {
+                next.PreHandle();
                 await next.Handle(isVerbose);
+            }
         }
 
-        public virtual void OnHandleComplete()
+        public virtual void PreHandle()
+        {
+            _buildProcCounter = buildProcs.Count();
+            var lockObj = new object();
+            foreach(var buildProcess in buildProcs)
+            {
+                buildProcess.EnableRaisingEvents = true;
+                buildProcess.Exited += (sender, args) => {
+                    lock(lockObj) {
+                        _buildProcCounter--;
+                    }
+                };
+            }
+        }
+
+        public virtual void PostHandle()
         {
 
         }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     public class Program
     {

@@ -30,7 +30,8 @@
     },
     {
       "StartupProjectRelativePath": ".",
-      "ProjectName": "testapp2",
+      "StartupDllName": "testapp.dll",
+      "ProjectName": "testapp3",
       "NextProjectName": "",
       "GitUrl": "https://github.com/coderookie1994/testapp.git",
       "GitBranchName": "master",

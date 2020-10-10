@@ -1,6 +1,6 @@
 using System;
 
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     public class ProcessEventArgs : EventArgs
     {
