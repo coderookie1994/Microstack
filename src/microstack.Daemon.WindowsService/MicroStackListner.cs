@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf;
 
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     public class MicroStackListner : BackgroundService
     {

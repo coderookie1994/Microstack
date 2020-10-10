@@ -6,7 +6,7 @@ using System.Linq;
 using System.Management;
 using System.Threading;
 
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     public class ProcessStateManager : IDisposable
     {

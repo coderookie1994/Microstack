@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace microstack.tests
+namespace Microstack.tests
 {
     public class UnitTest1
     {

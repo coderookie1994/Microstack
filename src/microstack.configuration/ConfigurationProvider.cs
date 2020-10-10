@@ -90,7 +90,6 @@ namespace Microstack.Configuration
         {       
             try {
                 _configurations = JsonConvert.DeserializeObject<Dictionary<string, IList<Microstack.Configuration.Models.Configuration>>>(File.ReadAllText(Path.Combine(path)));
-                // _lastComputedHash = ComputeHash(path);
                 ValidateProfileAndConfigurations();
                 _lastWrite = File.GetLastWriteTime(_configFile).ToFileTimeUtc();
             } catch(Exception ex)
@@ -131,7 +130,6 @@ namespace Microstack.Configuration
             lock (_lockObj) {
                 try {
                     var onChange = File.GetLastWriteTime(_configFile).ToFileTimeUtc();
-                    // var hashOnChange = ComputeHash(_configFile);
                     if (onChange == _lastWrite)
                         return;
 

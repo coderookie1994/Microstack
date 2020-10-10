@@ -1,6 +1,6 @@
 using ProtoBuf;
 
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     [ProtoContract]
     public class ProcessContract

@@ -4,7 +4,7 @@ using System.Management;
 using System.Threading;
 // using Timer = System.Timers.Timer;
 
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     public class ProcessState
     {

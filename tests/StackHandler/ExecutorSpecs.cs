@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using Microstack.Configuration.Models;
 using Microstack.Git.Abstractions;
 
-namespace microstack.tests
+namespace Microstack.tests
 {
     public class ExecutorSpecs
     {

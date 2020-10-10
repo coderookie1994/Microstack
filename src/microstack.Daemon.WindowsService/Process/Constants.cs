@@ -1,4 +1,4 @@
-namespace microstack.Daemon.WindowsService
+namespace Microstack.Daemon.WindowsService
 {
     public static class Constants
     {
