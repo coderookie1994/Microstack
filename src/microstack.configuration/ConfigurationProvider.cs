@@ -83,7 +83,7 @@ namespace Microstack.Configuration
             // _fileSystemWatcher.Changed += WatchForChange;
             // _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Attributes;
             // _fileSystemWatcher.EnableRaisingEvents = true;
-            _watcherThread = new Timer(WatchForChange, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
+            _watcherThread = new Timer(NotifyOnChange, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
         }
 
         private void ExtractConfigFromPath(string path)
@@ -125,7 +125,7 @@ namespace Microstack.Configuration
             }
         }
 
-        private void WatchForChange(object state)
+        private void NotifyOnChange(object state)
         {
             lock (_lockObj) {
                 try {

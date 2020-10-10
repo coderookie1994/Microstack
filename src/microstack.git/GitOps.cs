@@ -58,7 +58,7 @@ namespace Microstack.Git
 
                     repo.Reset(ResetMode.Hard);
                     
-                    Commands.Checkout(repo, branchName);
+                    Commands.Checkout(repo, branchName, new CheckoutOptions(){CheckoutModifiers = CheckoutModifiers.Force});
 
                     Commands.Pull(repo,
                         repo.Config.BuildSignature(DateTime.Now),

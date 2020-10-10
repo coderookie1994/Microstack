@@ -35,7 +35,7 @@
       "NextProjectName": "",
       "GitUrl": "https://github.com/coderookie1994/testapp.git",
       "GitBranchName": "master",
-      "UseTempFs": false,
+      "UseTempFs": true,
       "GitProjectRootPath": "C:\\github.com\\testapp2",
       "PullLatest": false,
       "Port": 5005,
