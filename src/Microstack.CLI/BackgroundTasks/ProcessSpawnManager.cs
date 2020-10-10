@@ -30,7 +30,10 @@ namespace Microstack.CLI.BackgroundTasks
         internal void SigKill(IEnumerable<string> enumerable)
         {
             foreach(var projName in enumerable)
-                _killQueue.Add(projName);
+            {
+                if (!_killQueue.IsAddingCompleted)
+                    _killQueue.Add(projName);
+            }
         }
 
         internal string DequeueKillRequests()

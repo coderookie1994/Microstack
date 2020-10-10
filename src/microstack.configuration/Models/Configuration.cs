@@ -17,6 +17,7 @@ namespace Microstack.Configuration.Models
         public string HostName { get; set; }
         public bool Verbose { get; set; }
         public Dictionary<string, string> ConfigOverrides { get; set; }
+        public string StartupDllName { get; set; }
 
         public (bool IsValid, string Message) Validate()
         {
