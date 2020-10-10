@@ -34,14 +34,14 @@
       "NextProjectName": "",
       "GitUrl": "https://github.com/coderookie1994/testapp.git",
       "GitBranchName": "master",
-      "UseTempFs": true,
+      "UseTempFs": false,
       "GitProjectRootPath": "C:\\github.com\\testapp2",
       "PullLatest": false,
       "Port": 5005,
       "Verbose": false,
       "ConfigOverrides": {
-        "Test": "FromOverridenKey2",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "Test": "FromOverridenKey3",
+        "ASPNETCORE_ENVIRONMENT": "Developmentsasd"
       }
     }
   ]

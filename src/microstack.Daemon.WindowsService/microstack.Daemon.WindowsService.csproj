@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetName>microstackd</TargetName>
     <UserSecretsId>dotnet-microstack.Daemon.WindowsService-38844BFB-8B89-424E-93C9-C3D470FC814C</UserSecretsId>
   </PropertyGroup>
 
