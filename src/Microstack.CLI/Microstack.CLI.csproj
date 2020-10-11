@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- <TargetName>microstack</TargetName> -->
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <TargetName>microstack</TargetName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,7 @@
     <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="3.0.0" />
     <PackageReference Include="AnyDiff" Version="1.0.83" />
     <PackageReference Include="protobuf-net" Version="3.0.29" />
+    <PackageReference Include="Figgle" Version="0.4.0" />
   </ItemGroup>
 
   <ItemGroup>

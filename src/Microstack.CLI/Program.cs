@@ -12,6 +12,8 @@ using Microstack.Git.Abstractions;
 using Microstack.CLI.Handlers;
 using Microstack.CLI.Helpers;
 using Microstack.CLI.Processor;
+using System;
+using Figgle;
 
 namespace Microstack.CLI
 {
@@ -20,6 +22,7 @@ namespace Microstack.CLI
         static void Main(string[] args)
         {
             var cts = new CancellationTokenSource();
+            Console.WriteLine(FiggleFonts.Epic.Render("MicroStack"));
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) => {
                     services.AddLogging();

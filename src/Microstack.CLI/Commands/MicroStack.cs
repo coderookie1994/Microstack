@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using Figgle;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
 using Microstack.CLI.Commands.SubCommands;
@@ -7,7 +9,7 @@ namespace Microstack.CLI.Commands
 {
     [Command("microstack", 
         UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect,
-        Description = "Seamlessly run your apps without opening Visual Studio")]
+        Description = "Seamlessly run your apps without opening any IDE")]
     [Subcommand(typeof(Run))]
     [Subcommand(typeof(New))]
     [Subcommand(typeof(TempFs))]
