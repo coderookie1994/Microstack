@@ -57,9 +57,11 @@ namespace Microstack.Configuration
             if (!IsContextSet)
                 throw new InvalidOperationException("Context not set");
 
-            if (_configurations.Count > 0 && string.IsNullOrWhiteSpace(_profile))
+            if (_configurations.Count > 1 && string.IsNullOrWhiteSpace(_profile))
                 return (1, "Multiple profiles found use -p to specify profile to use");
-            else if (!_configurations.ContainsKey(_profile))
+            else if (_configurations.Count() > 1 && !_configurations.ContainsKey(_profile))
+                return (1, $"Profile {_profile} not found in configuration");
+            else if (!string.IsNullOrWhiteSpace(_profile) && !_configurations.ContainsKey(_profile))
                 return (1, $"Profile {_profile} not found in configuration");
 
             return (0, string.Empty);
