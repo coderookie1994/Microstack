@@ -22,7 +22,6 @@ namespace Microstack.CLI
         static void Main(string[] args)
         {
             var cts = new CancellationTokenSource();
-            Console.WriteLine(FiggleFonts.Epic.Render("MicroStack"));
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) => {
                     services.AddLogging();

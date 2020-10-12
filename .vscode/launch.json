@@ -10,8 +10,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Microstack.CLI/bin/Debug/netcoreapp3.1/microstack.dll",
-            "args": ["run", "-v", "-c", ".mstkc.json", "-p", "profile2"],
+            "program": "${workspaceFolder}/src/Microstack.CLI/bin/Debug/netcoreapp3.1/Microstack.CLI.dll",
+            "args": ["run", "-v", "-c", ".mstkc.json", "-p", "quote_ux_np"],
             // "args": ["tempfs", "-d", "testapp"],
             // "args": ["new", "-c"],
             "cwd": "${workspaceFolder}/src/Microstack.CLI",

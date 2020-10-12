@@ -23,6 +23,7 @@ namespace Microstack.CLI.Commands
         }
         protected async override Task<int> OnExecute(CommandLineApplication app)
         {
+            Console.WriteLine(FiggleFonts.Epic.Render("MicroStack"));
             app.ShowHelp();
             return 0;
         }

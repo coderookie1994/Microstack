@@ -20,7 +20,6 @@ namespace Microstack.CLI.Handlers
         private bool _isVerbose;
         private Dictionary<string, string> _processNames;
         private readonly IConsole _console;
-        protected new bool raiseEventOnHandleComplete = true;
         public DotnetHandler(IConsole console,
             ProcessSpawnManager processSpawnManager,
             Microstack.Configuration.ConfigurationProvider configurationProvider) : base (processSpawnManager, configurationProvider)
@@ -30,22 +29,22 @@ namespace Microstack.CLI.Handlers
         }
         public override void PreHandle()
         {
-            var buildProcessObjects = configurationProvider.Configurations
-                // .Where(c => c.UseTempFs.Equals(false))
-                .Select(p => {
-                    var processStartInfo = new ProcessStartInfo();
-                    processStartInfo.UseShellExecute = false;
-                    processStartInfo.FileName = DotNetExe.FullPathOrDefault();
-                    processStartInfo.Arguments = $"build";
-                    processStartInfo.WorkingDirectory = Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath);
-                    processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
+            // var buildProcessObjects = configurationProvider.Configurations
+            //     // .Where(c => c.UseTempFs.Equals(false))
+            //     .Select(p => {
+            //         var processStartInfo = new ProcessStartInfo();
+            //         processStartInfo.UseShellExecute = false;
+            //         processStartInfo.FileName = DotNetExe.FullPathOrDefault();
+            //         processStartInfo.Arguments = $"build";
+            //         processStartInfo.WorkingDirectory = Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath);
+            //         processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
-                    return (p.ProjectName, processStartInfo);
-            }).ToList();
-            foreach(var pObj in buildProcessObjects)
-            {
-                buildProcs.Add(Process.Start(pObj.processStartInfo));
-            }
+            //         return (p.ProjectName, processStartInfo);
+            // }).ToList();
+            // foreach(var pObj in buildProcessObjects)
+            // {
+            //     buildProcs.Add(Process.Start(pObj.processStartInfo));
+            // }
             base.PreHandle();
         }
         public async override Task Handle(bool isVerbose)
@@ -100,8 +99,9 @@ namespace Microstack.CLI.Handlers
                         processStartInfo.Environment.Add(confOverride);
                     }
                     processStartInfo.FileName = DotNetExe.FullPathOrDefault();
-                    processStartInfo.Arguments = $"{p.StartupDllName ?? StartupDllName(Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath))} --urls \"https://{p.HostName ?? "localhost"}:{p.Port}\"";
-                    processStartInfo.WorkingDirectory = SetRunDirectory(Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath));
+                    // processStartInfo.Arguments = $"{p.StartupDllName ?? StartupDllName(Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath))} --urls \"https://{p.HostName ?? "localhost"}:{p.Port}\"";
+                    processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://{p.HostName ?? "localhost"}:{p.Port}\"";
+                    processStartInfo.WorkingDirectory = Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath);
                     processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 
                     return (p.ProjectName, processStartInfo);
