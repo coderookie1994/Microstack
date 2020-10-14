@@ -61,7 +61,7 @@ namespace Microstack.Git
                     Commands.Checkout(repo, branchName, new CheckoutOptions(){CheckoutModifiers = CheckoutModifiers.Force});
 
                     Commands.Pull(repo,
-                        repo.Config.BuildSignature(DateTime.Now),
+                        new Signature("microstack_user", _provider.GetCredentials().Email, DateTime.Now),
                         new PullOptions()
                         {
                             FetchOptions = new FetchOptions() {
@@ -118,7 +118,7 @@ namespace Microstack.Git
         private UsernamePasswordCredentials Credentials() => 
             new UsernamePasswordCredentials() {
                 Username = _provider.GetCredentials().Username, 
-                Password = _provider.GetCredentials().Token
+                Password = _provider.GetCredentials().Token,
             };
     }
 }

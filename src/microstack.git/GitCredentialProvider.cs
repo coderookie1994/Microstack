@@ -6,12 +6,14 @@ namespace Microstack.Git
     {
         private string Username { get; set; }
         private string Token { get; set; }
-        public (string Username, string Token) GetCredentials() => (Username, Token);
+        private string Email { get; set; }
+        public (string Username, string Token, string Email) GetCredentials() => (Username, Token, Email);
 
-        public void SetCredentials(string userName, string token)
+        public void SetCredentials(string userName, string token, string email)
         {
             Username = userName;
             Token = token;
+            Email = email;
         }
     }
 }

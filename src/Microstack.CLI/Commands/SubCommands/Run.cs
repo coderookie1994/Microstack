@@ -55,6 +55,7 @@ namespace Microstack.CLI.Commands.SubCommands
         public string Profile { get; set; }
         private string Username { get; set; }
         private string Password { get; set; }
+        private string Email { get; set; }
         
         private Dictionary<string, List<Microstack.Configuration.Models.Configuration>> _configurations;
         private Microstack.Configuration.ConfigurationProvider _configProvider;
@@ -104,7 +105,11 @@ namespace Microstack.CLI.Commands.SubCommands
                 _consoleHelper.Print("TempFS is set to true, enter git credentials");
                 Username = Prompt.GetString("Enter git Username");
                 Password = Prompt.GetPassword("Enter git token");
-                _credentialProvider.SetCredentials(Username, Password);
+                Email = Prompt.GetString("Enter git email");
+                // Username = "sharthak_ghosh";
+                // Password = "RUE2e1Gst72cEpH4LSx_";
+                // Email = "sharthak_ghosh@dell.com";
+                _credentialProvider.SetCredentials(Username, Password, Email);
             }
 
             // Start stack
