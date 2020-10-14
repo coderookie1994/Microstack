@@ -77,12 +77,6 @@ namespace Microstack.Configuration
             else if (_configurations.Count == 1)
                 _selectedConfigurations = _configurations.FirstOrDefault().Value;
             
-            // _fileSystemWatcher = new FileSystemWatcher();
-            // _fileSystemWatcher.Path = Path.Combine(Directory.GetCurrentDirectory());
-            // _fileSystemWatcher.Filter = Path.Combine(_configFile);
-            // _fileSystemWatcher.Changed += WatchForChange;
-            // _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Attributes;
-            // _fileSystemWatcher.EnableRaisingEvents = true;
             _watcherThread = new Timer(NotifyOnChange, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
         }
 
@@ -171,8 +165,7 @@ namespace Microstack.Configuration
                     _selectedConfigurations = _configurations.FirstOrDefault().Value;
                 }
                 
-                if (handler != null)
-                    handler(null, configChangeArgs);
+                handler?.Invoke(null, configChangeArgs);
             }
         }
 
