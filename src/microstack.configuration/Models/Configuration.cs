@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace Microstack.Configuration.Models
 {
@@ -18,6 +20,7 @@ namespace Microstack.Configuration.Models
         public bool Verbose { get; set; }
         public Dictionary<string, string> ConfigOverrides { get; set; }
         public string StartupDllName { get; set; }
+        public string LaunchProfile { get; set; }
 
         public (bool IsValid, string Message) Validate()
         {
@@ -39,6 +42,23 @@ namespace Microstack.Configuration.Models
             if (string.IsNullOrWhiteSpace(GitBranchName))
                 return (false, $"Required parameter {nameof(GitBranchName)} is missing");
             
+            return (true, string.Empty);
+        }
+
+        public (bool IsValid, string Message) ValidateLaunchSettings()
+        {
+            var launchSettingsPath = Path.Combine(GitProjectRootPath, StartupProjectRelativePath, "properties",
+                "launchSettings.json");
+            if (!string.IsNullOrWhiteSpace(LaunchProfile))
+            {
+                if (!File.Exists(launchSettingsPath))
+                    return (false,
+                        $"launchSettings.json file missing or path is invalid, cannot read {LaunchProfile}.");
+                var launchSettings = JObject.Parse(File.ReadAllText(launchSettingsPath));
+                var jToken = launchSettings.SelectToken($"$.profiles.{LaunchProfile}");
+                if (jToken is null)
+                    return (false, $"{LaunchProfile} not found in launchSettings.json");
+            }
             return (true, string.Empty);
         }
     }

@@ -63,7 +63,7 @@ namespace Microstack.CLI.Abstractions
         {
         }
 
-        public async override Task Handle(bool isVerbose)
+        public override async Task Handle(bool isVerbose)
         {
             await base.Handle(isVerbose);    
         }

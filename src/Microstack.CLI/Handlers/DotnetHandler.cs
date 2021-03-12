@@ -47,7 +47,7 @@ namespace Microstack.CLI.Handlers
             // }
             base.PreHandle();
         }
-        public async override Task Handle(bool isVerbose)
+        public override async Task Handle(bool isVerbose)
         {
             _isVerbose = isVerbose;
             _processNames = new Dictionary<string, string>();
@@ -99,8 +99,9 @@ namespace Microstack.CLI.Handlers
                         processStartInfo.Environment.Add(confOverride);
                     }
                     processStartInfo.FileName = DotNetExe.FullPathOrDefault();
+                    var profileArgument = string.IsNullOrWhiteSpace(p.LaunchProfile) ? " --no-launch-profile " : $" --launch-profile {p.LaunchProfile} ";
                     // processStartInfo.Arguments = $"{p.StartupDllName ?? StartupDllName(Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath))} --urls \"https://{p.HostName ?? "localhost"}:{p.Port}\"";
-                    processStartInfo.Arguments = $"run --no-launch-profile --urls \"https://{p.HostName ?? "localhost"}:{p.Port}\"";
+                    processStartInfo.Arguments = $"run {profileArgument} --urls \"https://{p.HostName ?? "localhost"}:{p.Port}\"";
                     processStartInfo.WorkingDirectory = Path.Combine(p.GitProjectRootPath, p.StartupProjectRelativePath);
                     processStartInfo.RedirectStandardOutput = SetVerbosity(_isVerbose, p.Verbose);
 

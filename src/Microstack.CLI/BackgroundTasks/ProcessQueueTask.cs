@@ -34,7 +34,7 @@ namespace Microstack.CLI.BackgroundTasks
         {
             _cancellationToken = cancellationToken;
             _spawnQueueScheduler = new Timer(SpawnQueuedProcess, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
-            _killQueueScheduler = new Timer(KillRequestedProcesses, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            _killQueueScheduler = new Timer(KillRequestedProcesses, null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
 
             return Task.CompletedTask;
         }

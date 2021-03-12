@@ -73,7 +73,7 @@ namespace Microstack.CLI.Commands.SubCommands
             _consoleHelper = consoleHelper;
         }
 
-        protected async override Task<int> OnExecute(CommandLineApplication app)
+        protected override async Task<int> OnExecute(CommandLineApplication app)
         {
             var ct = _lifetime.ApplicationStopping;
             _spc.SetVerbosity(Verbose);

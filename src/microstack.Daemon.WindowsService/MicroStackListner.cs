@@ -12,6 +12,7 @@ namespace Microstack.Daemon.WindowsService
     public class MicroStackListner : BackgroundService
     {
         private readonly ProcessStateManager _processStateManager;
+        private object _spawnManagerLock = new object();
         public MicroStackListner(ProcessStateManager processStateManager)
         {
             _processStateManager = processStateManager;
@@ -22,7 +23,7 @@ namespace Microstack.Daemon.WindowsService
             
             return base.StartAsync(cancellationToken);
         }
-        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while(!stoppingToken.IsCancellationRequested)
             {
@@ -38,7 +39,10 @@ namespace Microstack.Daemon.WindowsService
                     }
                     Console.WriteLine("Connected");
                     var processContract = Serializer.Deserialize<ProcessContract>(pipe);
-                    _processStateManager.AddProcess(processContract.ProcessId, processContract.MicroStackPID);
+                    lock (_spawnManagerLock)
+                    {
+                        _processStateManager.AddProcess(processContract.ProcessId, processContract.MicroStackPID);
+                    }
                     Console.WriteLine($"Registered {processContract.ProcessId} with MicroStack PID {processContract.MicroStackPID}");
                     pipe.Disconnect();
                 }

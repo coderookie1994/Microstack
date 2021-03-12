@@ -100,9 +100,12 @@ namespace Microstack.Configuration
             {
                 var profileValidationResult = profile.Value.Select(c => c.Validate());
                 var gitValidationResult = profile.Value.Select(c => c.ValidateGitConfig());
+                var launchProfileValidation = profile.Value.Select(c => c.ValidateLaunchSettings());
                 var hasDistinctProjectNames = profile.Value.Select(c => c.ProjectName).Distinct().Count() == profile.Value.Count();
 
-                if (profileValidationResult.Any(v => v.IsValid == false) && gitValidationResult.Any(v => v.IsValid == false))
+                if (profileValidationResult.Any(v => v.IsValid == false) 
+                    && gitValidationResult.Any(v => v.IsValid == false)
+                    && launchProfileValidation.Any(v => v.IsValid == false))
                     throw new InvalidDataException();
                 if (!hasDistinctProjectNames)
                     throw new InvalidDataException($"Project names in a profile have to be unique");
@@ -170,13 +173,5 @@ namespace Microstack.Configuration
                 handler?.Invoke(null, configChangeArgs);
             }
         }
-
-        // private byte[] ComputeHash(string path)
-        // {
-        //     using var md5 = MD5.Create();
-        //     var stream = File.OpenRead(path);
-        //     var hash = md5.ComputeHash(stream);
-        //     return hash;
-        // }
     }
 }
