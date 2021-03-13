@@ -8,6 +8,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+       mongodb-version: [4.0, 4.4]
 
     runs-on: ubuntu-latest
 
@@ -17,6 +20,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+    - name: MongoDB in GitHub Actions
+      uses: supercharge/mongodb-github-action@1.3.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
     - name: Restore dependencies
       run: |
         cd tests
