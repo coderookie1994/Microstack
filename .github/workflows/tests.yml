@@ -7,10 +7,10 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build_and_test:
     strategy:
       matrix:
-       mongodb-version: [4.0, 4.4]
+       mongodb-version: [4.4]
 
     runs-on: ubuntu-latest
 
