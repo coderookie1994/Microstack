@@ -17,8 +17,8 @@
     <PackageReference Include="Moq" Version="4.14.5" />
     <ProjectReference Include="..\src\Microstack.API\Microstack.API.csproj" />
 
-    <ProjectReference Include="..\src\microstack.git\Microstack.Git.csproj" />
-    <ProjectReference Include="..\src\microstack.configuration\Microstack.Configuration.csproj" />
+    <ProjectReference Include="..\src\Microstack.Git\Microstack.Git.csproj" />
+    <ProjectReference Include="..\src\Microstack.Configuration\Microstack.Configuration.csproj" />
     <ProjectReference Include="..\src\Microstack.CLI\Microstack.CLI.csproj" />
   </ItemGroup>
 
