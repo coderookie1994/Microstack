@@ -1,15 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.CLI", "Microstack.CLI\Microstack.CLI.csproj", "{018EFE8C-77F4-454A-A227-666A77475B85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.CLI", "Microstack.CLI\Microstack.CLI.csproj", "{018EFE8C-77F4-454A-A227-666A77475B85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microstack.configuration", "microstack.configuration\microstack.configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.configuration", "microstack.configuration\microstack.configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microstack.Daemon.WindowsService", "microstack.Daemon.WindowsService\microstack.Daemon.WindowsService.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.Daemon.WindowsService", "microstack.Daemon.WindowsService\microstack.Daemon.WindowsService.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microstack.git", "microstack.git\microstack.git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.git", "microstack.git\microstack.git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.Repository", "Microstack.Repository\Microstack.Repository.csproj", "{6BE789F0-587B-4E3B-A7DF-1D009A18081A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.API", "Microstack.API\Microstack.API.csproj", "{0C87A544-0908-4E7B-B2FF-0EE027A946A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{018EFE8C-77F4-454A-A227-666A77475B85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -72,5 +73,35 @@ Global
 		{1B30B3D7-901E-4C80-9B92-7342760DD448}.Release|x64.Build.0 = Release|Any CPU
 		{1B30B3D7-901E-4C80-9B92-7342760DD448}.Release|x86.ActiveCfg = Release|Any CPU
 		{1B30B3D7-901E-4C80-9B92-7342760DD448}.Release|x86.Build.0 = Release|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Debug|x64.Build.0 = Debug|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Debug|x86.Build.0 = Debug|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Release|x64.ActiveCfg = Release|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Release|x64.Build.0 = Release|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Release|x86.ActiveCfg = Release|Any CPU
+		{6BE789F0-587B-4E3B-A7DF-1D009A18081A}.Release|x86.Build.0 = Release|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x64.Build.0 = Release|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {663FCCAA-E838-4798-8562-4E931383599B}
 	EndGlobalSection
 EndGlobal
