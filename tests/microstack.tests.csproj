@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
@@ -14,10 +15,17 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Moq" Version="4.14.5" />
+    <ProjectReference Include="..\src\Microstack.API\Microstack.API.csproj" />
 
-    <ProjectReference Include="..\src\Microstack.Git\Microstack.Git.csproj" />
-    <ProjectReference Include="..\src\Microstack.Configuration\Microstack.Configuration.csproj" />
+    <ProjectReference Include="..\src\microstack.git\Microstack.Git.csproj" />
+    <ProjectReference Include="..\src\microstack.configuration\Microstack.Configuration.csproj" />
     <ProjectReference Include="..\src\Microstack.CLI\Microstack.CLI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="APITests\.mstkc.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

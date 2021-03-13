@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microstack.Git\Microstack.Git.csproj" />
-    <ProjectReference Include="..\Microstack.Configuration\Microstack.Configuration.csproj" />
+    <ProjectReference Include="..\microstack.git\Microstack.Git.csproj" />
+    <ProjectReference Include="..\microstack.configuration\Microstack.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

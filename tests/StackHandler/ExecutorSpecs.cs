@@ -13,6 +13,7 @@ using McMaster.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 using Microstack.Configuration.Models;
 using Microstack.Git.Abstractions;
+using Microstack.CLI.BackgroundTasks;
 
 namespace Microstack.tests
 {
@@ -39,12 +40,13 @@ namespace Microstack.tests
         public async Task Execute_WhenHandlersAreRegistered_ShouldExecute()
         {
             // Given
-            var gitHandler = new Mock<GitHandler>(new Mock<IGitOps>().Object, 
-                new Mock<Microstack.CLI.BackgroundTasks.ProcessSpawnManager>().Object, 
-                new Mock<Microstack.Configuration.ConfigurationProvider>().Object
-            );
-            var processHandler = new Mock<DotnetHandler>(new Mock<IConsole>().Object);
+            var configurationProvider = new Mock<Microstack.Configuration.ConfigurationProvider>(new Mock<IConsole>().Object);
+            var gitHandler = new Mock<GitHandler>(new Mock<IGitOps>().Object,
+                new Mock<Microstack.CLI.BackgroundTasks.ProcessSpawnManager>().Object,
+                configurationProvider.Object);
+            var processHandler = new Mock<DotnetHandler>(new Mock<IConsole>().Object, new Mock<ProcessSpawnManager>().Object, configurationProvider.Object);
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton<IConsole>(new Mock<IConsole>().Object);
             serviceCollection.RegisterHandlers(sh => {
                 sh.AddHandler<StackHandler>(gitHandler.Object);
                 sh.AddHandler<StackHandler>(processHandler.Object);

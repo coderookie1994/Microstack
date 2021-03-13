@@ -5,15 +5,17 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.CLI", "Microstack.CLI\Microstack.CLI.csproj", "{018EFE8C-77F4-454A-A227-666A77475B85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.configuration", "microstack.configuration\microstack.configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Configuration", "microstack.configuration\Microstack.Configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.Daemon.WindowsService", "microstack.Daemon.WindowsService\microstack.Daemon.WindowsService.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.git", "microstack.git\microstack.git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Git", "microstack.git\Microstack.Git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.Repository", "Microstack.Repository\Microstack.Repository.csproj", "{6BE789F0-587B-4E3B-A7DF-1D009A18081A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Repository", "Microstack.Repository\Microstack.Repository.csproj", "{6BE789F0-587B-4E3B-A7DF-1D009A18081A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.API", "Microstack.API\Microstack.API.csproj", "{0C87A544-0908-4E7B-B2FF-0EE027A946A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.API", "Microstack.API\Microstack.API.csproj", "{0C87A544-0908-4E7B-B2FF-0EE027A946A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Tests", "..\tests\Microstack.Tests.csproj", "{4C7DE51C-7748-44D8-A7C6-8196949900C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,18 @@ Global
 		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x64.Build.0 = Release|Any CPU
 		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x86.ActiveCfg = Release|Any CPU
 		{0C87A544-0908-4E7B-B2FF-0EE027A946A1}.Release|x86.Build.0 = Release|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Debug|x64.Build.0 = Debug|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Debug|x86.Build.0 = Debug|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Release|x64.Build.0 = Release|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C7DE51C-7748-44D8-A7C6-8196949900C3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

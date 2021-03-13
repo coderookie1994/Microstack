@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\microstack.configuration\Microstack.Configuration.csproj" />
     <ProjectReference Include="..\Microstack.Repository\Microstack.Repository.csproj" />
   </ItemGroup>
 
