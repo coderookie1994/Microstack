@@ -1,6 +1,6 @@
 ﻿using Microstack.API.Abstractions;
 using Microstack.API.Extensions;
-using Microstack.API.Models;
+using Microstack.Common.Models;
 using Microstack.Repository.Abstractions;
 using System;
 using System.Collections.Generic;

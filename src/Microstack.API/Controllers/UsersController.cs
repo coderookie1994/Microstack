@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microstack.API.Abstractions;
-using Microstack.API.Models;
+using Microstack.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

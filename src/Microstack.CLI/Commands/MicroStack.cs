@@ -13,6 +13,7 @@ namespace Microstack.CLI.Commands
     [Subcommand(typeof(Run))]
     [Subcommand(typeof(New))]
     [Subcommand(typeof(TempFs))]
+    [Subcommand(typeof(Users))]
     public class MicroStack : BaseCommand
     {
         private readonly IHostApplicationLifetime _hostApplicationLifetime;

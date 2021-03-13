@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microstack.API;
-using Microstack.API.Models;
+using Microstack.Common.Models;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;

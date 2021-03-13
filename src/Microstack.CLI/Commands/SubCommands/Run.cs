@@ -106,9 +106,6 @@ namespace Microstack.CLI.Commands.SubCommands
                 Username = Prompt.GetString("Enter git Username");
                 Password = Prompt.GetPassword("Enter git token");
                 Email = Prompt.GetString("Enter git email");
-                // Username = "sharthak_ghosh";
-                // Password = "RUE2e1Gst72cEpH4LSx_";
-                // Email = "sharthak_ghosh@dell.com";
                 _credentialProvider.SetCredentials(Username, Password, Email);
             }
 

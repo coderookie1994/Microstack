@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Microstack.API.Models
+namespace Microstack.Common.Models
 {
     public class Profile
     {

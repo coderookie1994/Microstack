@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Microstack.Common\Microstack.Common.csproj" />
     <ProjectReference Include="..\Microstack.Configuration\Microstack.Configuration.csproj" />
     <ProjectReference Include="..\Microstack.Repository\Microstack.Repository.csproj" />
   </ItemGroup>
