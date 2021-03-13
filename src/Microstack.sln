@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.CLI", "Microstack.CLI\Microstack.CLI.csproj", "{018EFE8C-77F4-454A-A227-666A77475B85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Configuration", "microstack.configuration\Microstack.Configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Configuration", "Microstack.Configuration\Microstack.Configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microstack.Daemon.WindowsService", "microstack.Daemon.WindowsService\microstack.Daemon.WindowsService.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Daemon.WindowsService", "Microstack.Daemon.WindowsService\Microstack.Daemon.WindowsService.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Git", "microstack.git\Microstack.Git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Git", "Microstack.git\Microstack.Git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Repository", "Microstack.Repository\Microstack.Repository.csproj", "{6BE789F0-587B-4E3B-A7DF-1D009A18081A}"
 EndProject
