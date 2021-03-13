@@ -1,4 +1,4 @@
-# microstack
+# Microstack
 ### Seamlessly run .net core apps using this CLI to avoid opening multiple code editors or instances of visual studio.
 
 This CLI tool was primarily built to support non docker based workflows, where manually multiple services need to be spanwed up to work with the application stack.
