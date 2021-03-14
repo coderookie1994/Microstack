@@ -1,4 +1,4 @@
-![Tests](https://github.com/coderookie1994/Microstack/actions/workflows/tests.yml/badge.svg)
+![master](https://github.com/coderookie1994/Microstack/actions/workflows/tests.yml/badge.svg)
 # Microstack
 ### Seamlessly run .net core apps using this CLI to avoid opening multiple code editors or instances of visual studio.
 
