@@ -17,16 +17,25 @@ using Figgle;
 
 namespace Microstack.CLI
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var cts = new CancellationTokenSource();
+            CreateHostBuilder(args)
+                .RunCommandLineApplicationAsync<MicroStack>(args, cts.Token)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) => 
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((context, services) => {
+                .ConfigureServices((context, services) =>
+                {
                     services.AddLogging();
                     services.AddSingleton<StackProcessor>();
-                    services.RegisterHandlers(sh => {
+                    services.RegisterHandlers(sh =>
+                    {
                         sh.AddHandler<GitHandler>();
                         sh.AddHandler<DotnetHandler>();
                     });
@@ -37,10 +46,6 @@ namespace Microstack.CLI
                     services.AddSingleton<ProcessQueueTask>();
                     services.AddHostedService(sp => sp.GetRequiredService<ProcessQueueTask>());
                     services.AddTransient<ConsoleHelper>();
-                })
-                .RunCommandLineApplicationAsync<MicroStack>(args, cts.Token)
-                .GetAwaiter()
-                .GetResult();
-        }
+                });
     }
 }

@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Tests", "..\test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.Common", "Microstack.Common\Microstack.Common.csproj", "{A8957924-FCB4-46A5-8489-39F878CD032A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testapp", "testapp", "{18E368A5-9AA6-437E-A60D-3AD94A758D3D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testapp", "..\testapp\testapp.csproj", "{767EFD95-3C18-45A4-83D5-C35B2603D68F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,9 +129,24 @@ Global
 		{A8957924-FCB4-46A5-8489-39F878CD032A}.Release|x64.Build.0 = Release|Any CPU
 		{A8957924-FCB4-46A5-8489-39F878CD032A}.Release|x86.ActiveCfg = Release|Any CPU
 		{A8957924-FCB4-46A5-8489-39F878CD032A}.Release|x86.Build.0 = Release|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Debug|x64.Build.0 = Debug|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Debug|x86.Build.0 = Debug|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Release|x64.ActiveCfg = Release|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Release|x64.Build.0 = Release|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Release|x86.ActiveCfg = Release|Any CPU
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{767EFD95-3C18-45A4-83D5-C35B2603D68F} = {18E368A5-9AA6-437E-A60D-3AD94A758D3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {663FCCAA-E838-4798-8562-4E931383599B}
