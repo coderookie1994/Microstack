@@ -1,0 +1,46 @@
+{
+  "defaultProfile": [
+    {
+      "StartupProjectRelativePath": ".",
+      "ProjectName": "testapp",
+      "NextProjectName": "",
+      "GitProjectRootPath": "C:\\github.com\\testapp",
+      "PullLatest": false,
+      "Port": 5001,
+      "Verbose": false,
+      "ConfigOverrides": {
+        "Test": "FromOverridenKey"
+      }
+    }
+  ],
+  "profile2": [
+    {
+      "StartupProjectRelativePath": "testapp",
+      "ProjectName": "testapp",
+      "NextProjectName": "x",
+      "GitProjectRootPath": "..\\..\\",
+      "PullLatest": false,
+      "Port": 5004,
+      "Verbose": false,
+      "ConfigOverrides": {
+        "ComplexObj:ComplexKey": "app1"
+      }
+    },
+    {
+      "StartupProjectRelativePath": "testapp",
+      "StartupDllName": "testapp.dll",
+      "ProjectName": "testapp3",
+      "NextProjectName": "",
+      "GitUrl": "https://github.com/coderookie1994/testapp.git",
+      "GitBranchName": "master",
+      "UseTempFs": false,
+      "GitProjectRootPath": "..\\..\\",
+      "PullLatest": false,
+      "Port": 5005,
+      "Verbose": false,
+      "ConfigOverrides": {
+        "ComplexObj:ComplexKey": "app2"
+      }
+    }
+  ]
+}
