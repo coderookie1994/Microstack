@@ -25,25 +25,31 @@ namespace Microstack.Daemon.WindowsService
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while(!stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 var p = Process.GetProcessesByName("microstack");
-                using (var pipe = new NamedPipeServerStream("microstack_pipe", PipeDirection.InOut, 5))
+                using (var pipe = new NamedPipeServerStream("microstack_pipe", PipeDirection.InOut, 5,
+                    PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
                 {
                     var managedThread = Thread.CurrentThread.ManagedThreadId;
-                    try {
-                        await pipe.WaitForConnectionAsync(stoppingToken);
-                    } catch(Exception ex)
+                    try
                     {
-                        
+                        await pipe.WaitForConnectionAsync(stoppingToken);
                     }
+                    catch (Exception ex)
+                    {
+
+                    }
+
                     Console.WriteLine("Connected");
                     var processContract = Serializer.Deserialize<ProcessContract>(pipe);
                     lock (_spawnManagerLock)
                     {
                         _processStateManager.AddProcess(processContract.ProcessId, processContract.MicroStackPID);
                     }
-                    Console.WriteLine($"Registered {processContract.ProcessId} with MicroStack PID {processContract.MicroStackPID}");
+
+                    Console.WriteLine(
+                        $"Registered {processContract.ProcessId} with MicroStack PID {processContract.MicroStackPID}");
                     pipe.Disconnect();
                 }
             }
