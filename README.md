@@ -1,5 +1,7 @@
-![master](https://github.com/coderookie1994/Microstack/actions/workflows/tests.yml/badge.svg)
 # Microstack
+
+![master](https://github.com/coderookie1994/Microstack/actions/workflows/develop_tests.yml/badge.svg)
+
 ### Seamlessly run .net core apps using this CLI to avoid opening multiple code editors or instances of visual studio.
 
 This CLI tool was primarily built to support non docker based workflows, where manually multiple services need to be spanwed up to work with the application stack.
