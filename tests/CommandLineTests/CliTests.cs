@@ -12,16 +12,16 @@ using Xunit;
 
 namespace Microstack.Tests.CommandLineTests
 {
-    public class CliTests : IClassFixture<IHttpClientFactory>, IDisposable
+    public class CliTests : IDisposable
     {
         private bool disposedValue;
         private CancellationTokenSource _cts;
         private HttpClient _client;
 
-        public CliTests(IHttpClientFactory factory)
+        public CliTests()
         {
             _cts = new CancellationTokenSource();
-            _client = factory.CreateClient();
+            _client = new HttpClient();
         }
 
         [Fact]
@@ -29,8 +29,8 @@ namespace Microstack.Tests.CommandLineTests
         {
             var cts = new CancellationTokenSource();
             var testAdapter = new ProgramTest();
-            testAdapter.StartDaemon();
-            testAdapter.StartHost(new string[] { "run", "-v", "-c", Path.Combine("config", ".mstkc.json"), "-p", "profile2" }, cts);
+            var daemonTask = testAdapter.StartDaemon();
+            var cliHost = testAdapter.StartHost(new string[] { "run", "-v", "-c", Path.Combine("config", ".mstkc.json"), "-p", "profile2" }, cts);
 
             Thread.Sleep(1000 * 5);
 
@@ -39,7 +39,7 @@ namespace Microstack.Tests.CommandLineTests
 
             Assert.Equal("app1", response1);
             Assert.Equal("app2", response2);
-            //cts.Cancel();
+            cts.Cancel();
         }
 
         protected virtual void Dispose(bool disposing)

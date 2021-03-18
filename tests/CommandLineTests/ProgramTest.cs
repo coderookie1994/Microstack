@@ -5,23 +5,29 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microstack.Tests.CommandLineTests
 {
     public class ProgramTest
     {
-        public void StartHost(string[] args, CancellationTokenSource cts)
+        public Task StartHost(string[] args, CancellationTokenSource cts)
         {
-            Program.CreateHostBuilder(args)
-                .RunCommandLineApplicationAsync<Microstack.CLI.Commands.MicroStack>(args, cts.Token);
+            return Task.Run(() =>
+            {
+                cts.Token.ThrowIfCancellationRequested();
+                Program.CreateHostBuilder(args)
+                    .RunCommandLineApplicationAsync<Microstack.CLI.Commands.MicroStack>(args, cts.Token);
+            }, cts.Token);
         }
 
-        public void StartDaemon()
+        public Task StartDaemon()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Microstack.Daemon.WindowsService.Program.CreateHostBuilder(new string[] { }).Build().RunAsync();
+                return Microstack.Daemon.WindowsService.Program.CreateHostBuilder(new string[] { }).Build().RunAsync();
             }
+            return Task.CompletedTask;
         }
     }
 }
