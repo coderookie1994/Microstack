@@ -39,7 +39,6 @@ namespace Microstack.Tests.CommandLineTests
 
             Assert.Equal("app1", response1);
             Assert.Equal("app2", response2);
-            cts.Cancel();
         }
 
         protected virtual void Dispose(bool disposing)
