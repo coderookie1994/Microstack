@@ -23,7 +23,8 @@
       "Port": 5004,
       "Verbose": false,
       "ConfigOverrides": {
-        "ComplexObj:ComplexKey": "app1"
+        "ComplexObj:ComplexKey": "app1",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     {
@@ -39,7 +40,8 @@
       "Port": 5005,
       "Verbose": false,
       "ConfigOverrides": {
-        "ComplexObj:ComplexKey": "app2"
+        "ComplexObj:ComplexKey": "app2",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   ]
