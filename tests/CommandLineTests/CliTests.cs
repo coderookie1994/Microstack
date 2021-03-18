@@ -30,6 +30,8 @@ namespace Microstack.Tests.CommandLineTests
             var cts = new CancellationTokenSource();
             var testAdapter = new ProgramTest();
             var daemonTask = testAdapter.StartDaemon();
+            // Wait for daemon
+            Thread.Sleep(1000 * 3);
             var cliHost = testAdapter.StartHost(new string[] { "run", "-v", "-c", Path.Combine("config", ".mstkc.json"), "-p", "profile2" }, cts);
 
             Thread.Sleep(1000 * 5);
