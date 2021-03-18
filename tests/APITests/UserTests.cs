@@ -26,7 +26,7 @@ namespace Microstack.Tests.API_Tests
             {
                 builder.ConfigureAppConfiguration((context, configuration) =>
                 {
-                    configuration.AddJsonFile(Path.Combine(".", "APITests", "appSettings.test.json"));
+                    configuration.AddJsonFile(Path.Combine(".", "config", "appSettings.test.json"));
                 }).Build();
             });
             var s = app.Services.GetRequiredService<IMongoClient>();
@@ -36,7 +36,7 @@ namespace Microstack.Tests.API_Tests
         [Fact]
         public async Task Post_ShouldReturnNoContent()
         {
-            var config = JsonConvert.DeserializeObject<IDictionary<string, IList<Configuration.Models.Configuration>>>(File.ReadAllText(Path.Combine("APITests", ".mstkc.json")));
+            var config = JsonConvert.DeserializeObject<IDictionary<string, IList<Configuration.Models.Configuration>>>(File.ReadAllText(Path.Combine("config", ".mstkc.json")));
             var profile = new Profile
             {
                 FileName = "mstkc",
