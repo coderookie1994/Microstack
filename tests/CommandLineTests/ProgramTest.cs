@@ -23,11 +23,7 @@ namespace Microstack.Tests.CommandLineTests
 
         public Task StartDaemon()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return Microstack.Daemon.WindowsService.Program.CreateHostBuilder(new string[] { }).Build().RunAsync();
-            }
-            return Task.CompletedTask;
+            return Microstack.Daemon.WindowsService.Program.CreateHostBuilder(new string[] { }).Build().RunAsync();
         }
     }
 }
