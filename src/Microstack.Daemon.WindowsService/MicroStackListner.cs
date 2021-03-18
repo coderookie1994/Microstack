@@ -25,6 +25,10 @@ namespace Microstack.Daemon.WindowsService
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            //var ps = new PipeSecurity();
+            //var sid = new System.Security.Principal.SecurityIdentifier(System.Security.Principal.WellKnownSidType.WorldSid, null);
+            //var par = new PipeAccessRule(sid, PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow);
+            //ps.AddAccessRule(par);
             while (!stoppingToken.IsCancellationRequested)
             {
                 var p = Process.GetProcessesByName("microstack");
@@ -32,13 +36,14 @@ namespace Microstack.Daemon.WindowsService
                     PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
                 {
                     var managedThread = Thread.CurrentThread.ManagedThreadId;
+                    Console.WriteLine($"Managed thread {managedThread}");
                     try
                     {
                         await pipe.WaitForConnectionAsync(stoppingToken);
                     }
                     catch (Exception ex)
                     {
-
+                        Console.WriteLine(ex.Message);
                     }
 
                     Console.WriteLine("Connected");
