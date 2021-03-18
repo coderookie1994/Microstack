@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.CLI", "Microstac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Configuration", "Microstack.Configuration\Microstack.Configuration.csproj", "{19427CFF-BBC6-4BC1-A4EF-208C48E1FC27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Daemon.WindowsService", "Microstack.Daemon.WindowsService\Microstack.Daemon.WindowsService.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Daemon", "Microstack.Daemon.WindowsService\Microstack.Daemon.csproj", "{EB09900D-1E87-42C4-936E-84CBF8BBB3EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Git", "Microstack.git\Microstack.Git.csproj", "{1B30B3D7-901E-4C80-9B92-7342760DD448}"
 EndProject
@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.API", "Microstac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Tests", "..\tests\Microstack.Tests.csproj", "{4C7DE51C-7748-44D8-A7C6-8196949900C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microstack.Common", "Microstack.Common\Microstack.Common.csproj", "{A8957924-FCB4-46A5-8489-39F878CD032A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microstack.Common", "Microstack.Common\Microstack.Common.csproj", "{A8957924-FCB4-46A5-8489-39F878CD032A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testapp", "testapp", "{18E368A5-9AA6-437E-A60D-3AD94A758D3D}"
 EndProject
