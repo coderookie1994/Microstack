@@ -43,6 +43,15 @@ namespace Microstack.API.Controllers
             if (invalidConfigurations.Count > 0)
                 return BadRequest(invalidConfigurations);
 
+            try
+            {
+                await _userService.PersistProfile(userId, profile);
+            }
+            catch(Exception)
+            {
+                return StatusCode(500);
+            }
+
             return NoContent();
         }
     }

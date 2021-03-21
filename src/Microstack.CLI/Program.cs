@@ -1,19 +1,16 @@
 ﻿using System.Threading;
-using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microstack.CLI.Abstractions;
 using Microstack.CLI.BackgroundTasks;
 using Microstack.CLI.Commands;
-using Microstack.CLI;
 using Microstack.CLI.Extensions;
 using Microstack.Git;
 using Microstack.Git.Abstractions;
 using Microstack.CLI.Handlers;
 using Microstack.CLI.Helpers;
 using Microstack.CLI.Processor;
-using System;
-using Figgle;
+using Microstack.Configuration.Abstractions;
+using Microstack.Configuration;
 
 namespace Microstack.CLI
 {
@@ -46,6 +43,7 @@ namespace Microstack.CLI
                     services.AddSingleton<ProcessQueueTask>();
                     services.AddHostedService(sp => sp.GetRequiredService<ProcessQueueTask>());
                     services.AddTransient<ConsoleHelper>();
+                    services.AddTransient<IUserSettingsProvider, UserSettingsProvider>();
                 });
     }
 }

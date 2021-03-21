@@ -9,5 +9,6 @@ namespace Microstack.API.Abstractions
     public interface IUserService
     {
         public Task<IList<Profile>> GetProfiles(string userId);
+        public Task PersistProfile(string userId, Profile profile);
     }
 }

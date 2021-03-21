@@ -21,5 +21,13 @@ namespace Microstack.API.Extensions
             }
             return result;
         }
+
+        public static Microstack.Repository.Models.Profile MapToRepositoryModel(this Profile profile)
+        {
+            var result = new Repository.Models.Profile();
+            result.ProfileName = profile.FileName;
+            result.Configurations = profile.Configurations;
+            return result;
+        }
     }
 }

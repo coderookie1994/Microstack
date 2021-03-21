@@ -53,7 +53,7 @@ namespace Microstack.Tests.API_Tests
         [Fact]
         public async Task Get_ShouldReturn404WhenUserNotFound()
         {
-            using (var message = new HttpRequestMessage(HttpMethod.Get, "api/users/sharthak_ghosh"))
+            using (var message = new HttpRequestMessage(HttpMethod.Get, "api/users/ghosh_sharthak"))
             {
                 var result = await _client.SendAsync(message);
                 result.StatusCode.Should().Be(404);

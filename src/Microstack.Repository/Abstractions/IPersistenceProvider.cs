@@ -9,5 +9,6 @@ namespace Microstack.Repository.Abstractions
     public interface IPersistenceProvider
     {
         Task<List<Profile>> GetProfilesForUser(string userId);
+        Task PersistProfile(string userId, Profile profile);
     }
 }
