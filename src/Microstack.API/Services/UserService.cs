@@ -24,6 +24,11 @@ namespace Microstack.API.Services
             return profiles.MapFromPersistenceModel();
         }
 
+        public Task<IReadOnlyList<string>> GetUsers()
+        {
+            return _persistenceProvider.GetUsers();
+        }
+
         public async Task PersistProfile(string userId, Profile profile)
         {
             await _persistenceProvider.PersistProfile(userId, profile.MapToRepositoryModel());
