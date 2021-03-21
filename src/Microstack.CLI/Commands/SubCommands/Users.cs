@@ -37,15 +37,6 @@ namespace Microstack.CLI.Commands.SubCommands
         public string UserId { get; set; }
 
         [Option(
-            CommandOptionType.NoValue,
-            Description = "List user profiles",
-            LongName = "profiles",
-            ShortName = "p",
-            ShowInHelpText = true
-            )]
-        public bool ShowProfiles { get; set; }
-
-        [Option(
             CommandOptionType.SingleValue,
             Description = "Add API Url",
             LongName = "url",
@@ -84,32 +75,44 @@ namespace Microstack.CLI.Commands.SubCommands
 
             if (!string.IsNullOrWhiteSpace(UserId))
             {
-                if (ShowProfiles)
+
+                using (var client = new HttpClient())
                 {
-                    using (var client = new HttpClient())
+                    client.BaseAddress = new Uri(settings);
+                    try
                     {
-                        client.BaseAddress = new Uri(settings);
-                        try
-                        {
-                            var response = await (await client.GetAsync($"/api/users/{UserId}")).Content.ReadAsStringAsync();
-                            var formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(response), Formatting.Indented);
-                            OuputToConsole(formattedJson);
-                            return 0;
-                        }
-                        catch (Exception ex)
-                        {
-                            OutputError($"Error occurred while connecting to api {ex.Message}");
-                            return 1;
-                        }
+                        var response = await (await client.GetAsync($"/api/users/{UserId}")).Content.ReadAsStringAsync();
+                        var formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(response), Formatting.Indented);
+                        OuputToConsole(formattedJson);
+                        return 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        OutputError($"Error occurred while connecting to api {ex.Message}");
+                        return 1;
                     }
                 }
-                else
+            }
+            if (All)
+            {
+                using (var client = new HttpClient())
                 {
-                    app.ShowHelp();
-                    return 1;
+                    client.BaseAddress = new Uri(settings);
+                    try
+                    {
+                        var response = await (await client.GetAsync($"/api/users")).Content.ReadAsStringAsync();
+                        var formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(response), Formatting.Indented);
+                        OuputToConsole(formattedJson);
+                        return 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        OutputError($"Error occurred while connecting to api {ex.Message}");
+                        return 1;
+                    }
                 }
             }
-
+            
             app.ShowHelp();
             return 0;
         }

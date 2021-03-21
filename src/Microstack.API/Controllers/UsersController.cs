@@ -20,6 +20,9 @@ namespace Microstack.API.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get() => Ok(await _userService.GetUsers());
+
         [HttpGet("{userId}")]
         public async Task<IActionResult> Get(string userId)
         {
