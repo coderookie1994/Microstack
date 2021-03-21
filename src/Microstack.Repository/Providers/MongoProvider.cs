@@ -34,5 +34,12 @@ namespace Microstack.Repository.Providers
 
             await userProfiles.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }
+
+        public async Task<IReadOnlyList<string>> GetUsers()
+        {
+            var userProfiles = _database.GetCollection<User>("user.profiles");
+            var users = await (userProfiles.Find(FilterDefinition<User>.Empty).Project(f => f.UserId).ToListAsync());
+            return users;
+        }
     }
 }
