@@ -1,10 +1,8 @@
 ﻿using Microstack.Repository.Abstractions;
 using Microstack.Repository.Models;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Microstack.Repository.Providers
@@ -26,6 +24,15 @@ namespace Microstack.Repository.Providers
             var userProfiles = _database.GetCollection<User>("user.profiles");
             var result = (await userProfiles.FindAsync<User>(filter)).ToList();
             return result.SelectMany(r => r.Profiles).ToList();
+        }
+
+        public async Task PersistProfile(string userId, Profile profile)
+        {
+            var filter = Builders<User>.Filter.Eq(f => f.UserId, userId);
+            var userProfiles = _database.GetCollection<User>("user.profiles");
+            var update = Builders<User>.Update.AddToSet<Profile>(p => p.Profiles, profile);
+
+            await userProfiles.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Microstack.Repository.Models
         [BsonId]
         public ObjectId Id { get; set; }
         public string UserId { get; set; }
-        public IList<Profile> Profiles { get; set; } = new List<Profile>();
+        public List<Profile> Profiles { get; set; } = new List<Profile>();
     }
 
     public class Profile

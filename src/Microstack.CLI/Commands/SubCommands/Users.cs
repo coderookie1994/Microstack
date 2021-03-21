@@ -1,7 +1,10 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microstack.CLI.Helpers;
+using Microstack.Configuration.Abstractions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +17,7 @@ namespace Microstack.CLI.Commands.SubCommands
     public class Users : BaseCommand
     {
         private CommandLineApplication _app;
+        private readonly IUserSettingsProvider _userSettingsProvider;
 
         [Option(
             CommandOptionType.NoValue,
@@ -32,20 +36,81 @@ namespace Microstack.CLI.Commands.SubCommands
             ValueName = "UserId")]
         public string UserId { get; set; }
 
-        public Users(ConsoleHelper consoleHelper)
+        [Option(
+            CommandOptionType.NoValue,
+            Description = "List user profiles",
+            LongName = "profiles",
+            ShortName = "p",
+            ShowInHelpText = true
+            )]
+        public bool ShowProfiles { get; set; }
+
+        [Option(
+            CommandOptionType.SingleValue,
+            Description = "Add API Url",
+            LongName = "url",
+            ShortName = "ul",
+            ShowInHelpText = true,
+            ValueName = "URL"
+            )]
+        public string ApiUrl { get; set; }
+
+        public Users(ConsoleHelper consoleHelper, IUserSettingsProvider userSettingsProvider)
         {
             _consoleHelper = consoleHelper;
+            _userSettingsProvider = userSettingsProvider;
         }
 
         protected override async Task<int> OnExecute(CommandLineApplication app)
         {
             _app = app;
-            if (!Validate())
+            //if (!Validate())
+            //{
+            //    return 1;
+            //}
+
+            if (!string.IsNullOrWhiteSpace(ApiUrl))
             {
+                _userSettingsProvider.AddSetting(ApiUrl);
+                return 0;
+            }
+
+            var settings = _userSettingsProvider.GetSettings();
+            if (string.IsNullOrEmpty(settings))
+            {
+                OutputError("Missing api url, make sure to add a valid url, type microstack users --help for details");
                 return 1;
-            }    
+            }
 
+            if (!string.IsNullOrWhiteSpace(UserId))
+            {
+                if (ShowProfiles)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(settings);
+                        try
+                        {
+                            var response = await (await client.GetAsync($"/api/users/{UserId}")).Content.ReadAsStringAsync();
+                            var formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(response), Formatting.Indented);
+                            OuputToConsole(formattedJson);
+                            return 0;
+                        }
+                        catch (Exception ex)
+                        {
+                            OutputError($"Error occurred while connecting to api {ex.Message}");
+                            return 1;
+                        }
+                    }
+                }
+                else
+                {
+                    app.ShowHelp();
+                    return 1;
+                }
+            }
 
+            app.ShowHelp();
             return 0;
         }
 
@@ -55,7 +120,7 @@ namespace Microstack.CLI.Commands.SubCommands
             var urlIsValid = Uri.TryCreate(microStackUrl, UriKind.Absolute, out Uri validUrl);
             if (string.IsNullOrWhiteSpace(microStackUrl) || !urlIsValid)
             {
-                OutputError("MSTCK_API variable not found or empty or url is incorrect. Set a valid Microstack Url in order to use other users' workflows.");
+                OutputError("MSTCK_API variable not found or empty or url is incorrect. Set a valid Microstack Url in order to use other users' workflows. Type microstack users --help for details");
                 return false;
             }
 
