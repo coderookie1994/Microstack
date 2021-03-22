@@ -1,0 +1,1 @@
+sc.exe delete "Microstack Background Service"
