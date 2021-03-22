@@ -1,4 +1,5 @@
-﻿using Microstack.API.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microstack.API.Abstractions;
 using Microstack.API.Extensions;
 using Microstack.Common.Models;
 using Microstack.Repository.Abstractions;
@@ -16,6 +17,11 @@ namespace Microstack.API.Services
         public UserService(IPersistenceProvider persistenceProvider)
         {
             _persistenceProvider = persistenceProvider;
+        }
+
+        public async Task<Profile> GetProfile(string userId, string profileId)
+        {
+            return (await GetProfiles(userId)).Where(p => p.FileName.Equals(profileId))?.FirstOrDefault();
         }
 
         public async Task<IList<Profile>> GetProfiles(string userId)

@@ -46,6 +46,16 @@ namespace Microstack.CLI.Commands.SubCommands
             )]
         public string ApiUrl { get; set; }
 
+        [Option(
+            CommandOptionType.SingleValue,
+            Description = "Download Config",
+            LongName = "download",
+            ShortName = "d",
+            ShowInHelpText = true,
+            ValueName = "<CONFIG FILENAME>"
+            )]
+        public string Download { get; set; }
+
         public Users(ConsoleHelper consoleHelper, IUserSettingsProvider userSettingsProvider)
         {
             _consoleHelper = consoleHelper;
@@ -111,6 +121,15 @@ namespace Microstack.CLI.Commands.SubCommands
                         return 1;
                     }
                 }
+            }
+            if (!string.IsNullOrWhiteSpace(Download))
+            {
+                if (string.IsNullOrWhiteSpace(UserId))
+                {
+                    OutputError($"Enter a valid user id");
+                    return 1;
+                }
+
             }
             
             app.ShowHelp();
