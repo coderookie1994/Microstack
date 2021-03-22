@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,36 @@ namespace Microstack.Tests.API_Tests
                 message.Content = new StringContent(JsonConvert.SerializeObject(profile), Encoding.UTF8, "application/json");
                 var result = await _client.SendAsync(message);
                 result.StatusCode.Should().Be(204);
+            }
+        }
+
+        [Fact]
+        public async Task GetAParticularProfile()
+        {
+            // Given
+            var config = JsonConvert.DeserializeObject<IDictionary<string, IList<Configuration.Models.Configuration>>>(File.ReadAllText(Path.Combine("config", ".mstkc.json")));
+            var profile = new Profile
+            {
+                FileName = "mstkc",
+                Configurations = config
+            };
+            using (var message = new HttpRequestMessage(HttpMethod.Post, "api/users/coderookie1994/profile"))
+            {
+                message.Content = new StringContent(JsonConvert.SerializeObject(profile), Encoding.UTF8, "application/json");
+                var result = await _client.SendAsync(message);
+                result.StatusCode.Should().Be(204);
+            }
+
+            // When
+            using (var message = new HttpRequestMessage(HttpMethod.Get, "api/users/coderookie1994/profile/mstkc"))
+            {
+                var result = await _client.SendAsync(message);
+                result.StatusCode.Should().Be(200);
+
+                var profileResponse = JsonConvert.DeserializeObject<Profile>(await result.Content.ReadAsStringAsync());
+
+                // Then
+                Assert.Equal("mstkc", profileResponse.FileName);
             }
         }
 

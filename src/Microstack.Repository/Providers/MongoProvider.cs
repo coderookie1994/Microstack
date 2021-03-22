@@ -31,6 +31,15 @@ namespace Microstack.Repository.Providers
             var filter = Builders<User>.Filter.Eq(f => f.UserId, userId);
             var userProfiles = _database.GetCollection<User>("user.profiles");
             var update = Builders<User>.Update.AddToSet<Profile>(p => p.Profiles, profile);
+            var arrayFilter = filter & Builders<User>.Filter.ElemMatch(p => p.Profiles, Builders<Profile>.Filter.Eq(f => f.ProfileName, profile.ProfileName));
+            var exists = (await userProfiles.FindAsync<User>(arrayFilter)).ToList();
+            
+            if (exists.Any())
+            {
+                var positionalUpdate = Builders<User>.Update.Set<Profile>(p => p.Profiles[-1], profile);
+                await userProfiles.UpdateOneAsync(arrayFilter, positionalUpdate);
+                return;
+            }
 
             await userProfiles.UpdateOneAsync(filter, update, new UpdateOptions() { IsUpsert = true });
         }

@@ -17,22 +17,22 @@ namespace Microstack.Tests.CommandLineTests
         private bool disposedValue;
         private CancellationTokenSource _cts;
         private HttpClient _client;
+        private ProgramTest _testAdapter;
 
         public CliTests()
         {
             _cts = new CancellationTokenSource();
             _client = new HttpClient();
+            _testAdapter = new ProgramTest();
         }
 
         [Fact(Skip ="Fix issue with pipes on linux")]
         public async Task ShouldOverrideConfigValues_WhenSpecifiedInConfiguration()
         {
-            var cts = new CancellationTokenSource();
-            var testAdapter = new ProgramTest();
-            var daemonTask = testAdapter.StartDaemon();
+            var daemonTask = _testAdapter.StartDaemon();
             // Wait for daemon
             Thread.Sleep(1000 * 3);
-            var cliHost = testAdapter.StartHost(new string[] { "run", "-v", "-c", Path.Combine("config", ".mstkc.json"), "-p", "profile2" }, cts);
+            var cliHost = _testAdapter.StartHost(new string[] { "run", "-v", "-c", Path.Combine("config", ".mstkc.json"), "-p", "profile2" }, _cts);
 
             Thread.Sleep(1000 * 5);
 

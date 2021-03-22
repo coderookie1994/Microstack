@@ -32,6 +32,21 @@ namespace Microstack.API.Controllers
             return NotFound($"No user profiles found for user with id {userId}");
         }
 
+        [HttpGet("{userId}/profile/{profileId}")]
+        public async Task<IActionResult> GetProfile(string userId, string profileId)
+        {
+            if (string.IsNullOrWhiteSpace(profileId))
+                return BadRequest("ProfileId cannot be null");
+
+            try
+            {
+                return Ok(await _userService.GetProfile(userId, profileId));
+            } catch(Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+        
         [HttpPost("{userId}/profile")]
         public async Task<IActionResult> PostProfile(string userId, [FromBody] Profile profile)
         {
@@ -50,7 +65,7 @@ namespace Microstack.API.Controllers
             {
                 await _userService.PersistProfile(userId, profile);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
                 return StatusCode(500);
             }

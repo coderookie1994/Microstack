@@ -1,4 +1,5 @@
-﻿using Microstack.Common.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microstack.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Microstack.API.Abstractions
         public Task<IList<Profile>> GetProfiles(string userId);
         public Task PersistProfile(string userId, Profile profile);
         Task<IReadOnlyList<string>> GetUsers();
+        Task<Profile> GetProfile(string userId, string profileId);
     }
 }
