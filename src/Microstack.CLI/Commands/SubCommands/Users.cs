@@ -52,7 +52,7 @@ namespace Microstack.CLI.Commands.SubCommands
             LongName = "download",
             ShortName = "d",
             ShowInHelpText = true,
-            ValueName = "<CONFIG FILENAME>"
+            ValueName = "CONFIG FILENAME"
             )]
         public string Download { get; set; }
 
@@ -85,42 +85,25 @@ namespace Microstack.CLI.Commands.SubCommands
 
             if (!string.IsNullOrWhiteSpace(UserId))
             {
-
-                using (var client = new HttpClient())
+                var (response, error) = await _userSettingsProvider.GetUserSettings(UserId);
+                if (error)
                 {
-                    client.BaseAddress = new Uri(settings);
-                    try
-                    {
-                        var response = await (await client.GetAsync($"/api/users/{UserId}")).Content.ReadAsStringAsync();
-                        var formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(response), Formatting.Indented);
-                        OuputToConsole(formattedJson);
-                        return 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        OutputError($"Error occurred while connecting to api {ex.Message}");
-                        return 1;
-                    }
+                    OutputError(response);
+                    return 1;
                 }
+                OuputToConsole(response);
+                return 0;
             }
             if (All)
             {
-                using (var client = new HttpClient())
+                var (response, error) = await _userSettingsProvider.ListAllUsers();
+                if (error)
                 {
-                    client.BaseAddress = new Uri(settings);
-                    try
-                    {
-                        var response = await (await client.GetAsync($"/api/users")).Content.ReadAsStringAsync();
-                        var formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(response), Formatting.Indented);
-                        OuputToConsole(formattedJson);
-                        return 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        OutputError($"Error occurred while connecting to api {ex.Message}");
-                        return 1;
-                    }
+                    OutputError(response);
+                    return 1;
                 }
+                OuputToConsole(response);
+                return 0;
             }
             if (!string.IsNullOrWhiteSpace(Download))
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Microstack.Configuration.Abstractions
 {
@@ -8,5 +9,7 @@ namespace Microstack.Configuration.Abstractions
     {
         string GetSettings();
         void AddSetting(string url);
+        Task<(string Response, bool Error)> GetUserSettings(string userId);
+        Task<(string Response, bool Error)> ListAllUsers();
     }
 }
