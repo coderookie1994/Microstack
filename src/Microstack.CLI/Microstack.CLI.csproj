@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Microstack.Git\Microstack.Git.csproj" />
     <ProjectReference Include="..\Microstack.Configuration\Microstack.Configuration.csproj" />
+    <ProjectReference Include="..\Microstack.Common\Microstack.Common.csproj" />
   </ItemGroup>
 
 </Project>

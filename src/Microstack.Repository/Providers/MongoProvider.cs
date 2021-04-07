@@ -50,5 +50,13 @@ namespace Microstack.Repository.Providers
             var users = await (userProfiles.Find(FilterDefinition<User>.Empty).Project(f => f.UserId).ToListAsync());
             return users;
         }
+
+        public async Task<Profile> GetProfile(string userId, string profileName)
+        {
+            var filter = Builders<User>.Filter.Eq(f => f.UserId, userId);
+            var userProfiles = _database.GetCollection<User>("user.profiles");
+            var result = (await userProfiles.FindAsync<User>(filter)).ToList().SelectMany(u => u.Profiles.Where(p => p.ProfileName.Equals(profileName)));
+            throw new System.NotImplementedException();
+        }
     }
 }

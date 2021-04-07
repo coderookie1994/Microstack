@@ -11,5 +11,6 @@ namespace Microstack.Repository.Abstractions
         Task<List<Profile>> GetProfilesForUser(string userId);
         Task PersistProfile(string userId, Profile profile);
         Task<IReadOnlyList<string>> GetUsers();
+        Task<Profile> GetProfile(string userId, string profileName);
     }
 }

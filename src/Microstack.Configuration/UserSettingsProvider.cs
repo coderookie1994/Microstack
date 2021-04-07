@@ -69,5 +69,27 @@ namespace Microstack.Configuration
                 }
             }
         }
+
+        public async Task<(string Response, bool Error)> GetProfile(string userId, string profileId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(GetSettings());
+                try
+                {
+                    var response = await client.GetAsync($"/api/users/{userId}/profile/{profileId}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var profile = await response.Content.ReadAsStringAsync();
+                        return (profile, false);
+                    }
+                    return (await response.Content.ReadAsStringAsync(), true);
+                }
+                catch (Exception ex)
+                {
+                    return ($"error occurred while connecting to api {ex.Message}", true);
+                }
+            }
+        }
     }
 }
