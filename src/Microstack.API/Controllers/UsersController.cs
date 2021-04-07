@@ -40,7 +40,12 @@ namespace Microstack.API.Controllers
 
             try
             {
-                return Ok(await _userService.GetProfile(userId, profileId));
+                var result = await _userService.GetProfile(userId, profileId);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound();
             } catch(Exception)
             {
                 return StatusCode(500);

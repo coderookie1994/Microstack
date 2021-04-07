@@ -11,5 +11,6 @@ namespace Microstack.Configuration.Abstractions
         void AddSetting(string url);
         Task<(string Response, bool Error)> GetUserSettings(string userId);
         Task<(string Response, bool Error)> ListAllUsers();
+        Task<(string Response, bool Error)> GetProfile(string userId, string profileId);
     }
 }

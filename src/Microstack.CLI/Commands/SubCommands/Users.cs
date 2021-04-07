@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microstack.Common;
+using System.IO;
 
 namespace Microstack.CLI.Commands.SubCommands
 {
@@ -52,7 +54,7 @@ namespace Microstack.CLI.Commands.SubCommands
             LongName = "download",
             ShortName = "d",
             ShowInHelpText = true,
-            ValueName = "CONFIG FILENAME"
+            ValueName = "USERID:CONFIG_FILENAME"
             )]
         public string Download { get; set; }
 
@@ -107,12 +109,22 @@ namespace Microstack.CLI.Commands.SubCommands
             }
             if (!string.IsNullOrWhiteSpace(Download))
             {
-                if (string.IsNullOrWhiteSpace(UserId))
+                var splitStrings = Download.Split(":");
+                if (splitStrings.Length != 2)
                 {
-                    OutputError($"Enter a valid user id");
+                    OutputError($"Incorrect format, please use USER_ID:CONFIG_NAME as the string format");
                     return 1;
                 }
-
+                var (response, error) = await _userSettingsProvider.GetProfile(splitStrings[0], splitStrings[1]);
+                if (error)
+                {
+                    OutputError($"{response}");
+                    return 1;
+                }
+                var profile = JsonConvert.DeserializeObject<Common.Models.Profile>(response);
+                File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), profile.FileName), JsonConvert.SerializeObject(profile.Configurations, Formatting.Indented));
+                
+                return 0;
             }
             
             app.ShowHelp();

@@ -51,8 +51,9 @@ namespace Microstack.Tests.API_Tests
             }
         }
 
-        [Fact]
-        public async Task GetAParticularProfile()
+        [Theory]
+        [InlineData("mstkc", "mstkc")]
+        public async Task GetAParticularProfile(string expected, string profileName)
         {
             // Given
             var config = JsonConvert.DeserializeObject<IDictionary<string, IList<Configuration.Models.Configuration>>>(File.ReadAllText(Path.Combine("config", ".mstkc.json")));
@@ -69,7 +70,7 @@ namespace Microstack.Tests.API_Tests
             }
 
             // When
-            using (var message = new HttpRequestMessage(HttpMethod.Get, "api/users/coderookie1994/profile/mstkc"))
+            using (var message = new HttpRequestMessage(HttpMethod.Get, $"api/users/coderookie1994/profile/{profileName}"))
             {
                 var result = await _client.SendAsync(message);
                 result.StatusCode.Should().Be(200);
@@ -77,7 +78,7 @@ namespace Microstack.Tests.API_Tests
                 var profileResponse = JsonConvert.DeserializeObject<Profile>(await result.Content.ReadAsStringAsync());
 
                 // Then
-                Assert.Equal("mstkc", profileResponse.FileName);
+                Assert.Equal(expected, profileResponse.FileName);
             }
         }
 
