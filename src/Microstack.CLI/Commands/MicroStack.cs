@@ -9,10 +9,10 @@ namespace Microstack.CLI.Commands
 {
     [Command("microstack", 
         UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect,
-        Description = "Seamlessly run your apps without opening any IDE")]
+        Description = "One stop shop to run all your apps")]
     [Subcommand(typeof(Run))]
     [Subcommand(typeof(New))]
-    [Subcommand(typeof(TempFs))]
+    //[Subcommand(typeof(TempFs))]
     [Subcommand(typeof(Users))]
     public class MicroStack : BaseCommand
     {
